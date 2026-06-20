@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Flask Backend",
+      "type": "python",
+      "request": "launch",
+      "module": "flask",
+      "env": {
+        "FLASK_APP": "backend/app.py",
+        "FLASK_ENV": "development"
+      },
+      "args": ["run", "--port", "5000"],
+      "jinja": true,
+      "justMyCode": true
+    }
+  ]
+}

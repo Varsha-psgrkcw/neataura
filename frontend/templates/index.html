@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeatAura – Home & Technical Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#6C3CE1;--primary-light:#8B5CF6;--primary-dark:#4C1D95;
+  --accent:#F59E0B;--accent2:#10B981;
+  --blue:#2563EB;--blue-light:#3B82F6;
+  --warm:#FF6B35;
+  --bg:#F8F7FF;--white:#FFFFFF;--dark:#1A1A2E;
+  --gray:#6B7280;--gray-light:#F3F4F6;--gray-border:#E5E7EB;
+  --success:#10B981;--danger:#EF4444;
+  --font:'Poppins',sans-serif;
+  --radius:12px;--radius-lg:20px;--radius-xl:28px;
+  --shadow:0 4px 24px rgba(108,60,225,0.10);
+  --shadow-lg:0 8px 40px rgba(108,60,225,0.18);
+}
+body{font-family:var(--font);background:var(--bg);color:var(--dark);overflow-x:hidden;}
+.hidden{display:none!important;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:3px;}
+.page{min-height:100vh;display:flex;flex-direction:column;}
+nav{background:var(--white);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:sticky;top:0;z-index:100;}
+.logo{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo span{-webkit-text-fill-color:var(--accent);}
+.nav-links{display:flex;gap:2rem;align-items:center;}
+.nav-links a{text-decoration:none;color:var(--gray);font-size:.9rem;font-weight:500;transition:.2s;cursor:pointer;}
+.nav-links a:hover{color:var(--primary);}
+.nav-btn{background:linear-gradient(135deg,var(--primary),var(--blue-light));color:#fff!important;padding:.5rem 1.2rem;border-radius:8px;font-weight:600!important;}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;border-radius:var(--radius);font-family:var(--font);font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:all .25s;text-decoration:none;}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 16px rgba(108,60,225,0.3);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,60,225,0.4);}
+.btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary);}
+.btn-outline:hover{background:var(--primary);color:#fff;}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;}
+.btn-sm{padding:.5rem 1.1rem;font-size:.85rem;}
+.btn-success{background:linear-gradient(135deg,var(--success),#34D399);color:#fff;}
+#page-register{background:linear-gradient(135deg,#F3F0FF 0%,#EEF4FF 50%,#F0FDF4 100%);justify-content:center;align-items:center;}
+.auth-card{background:var(--white);border-radius:var(--radius-xl);padding:2.5rem;width:100%;max-width:440px;box-shadow:var(--shadow-lg);}
+.auth-card h2{font-size:1.8rem;font-weight:700;margin-bottom:.4rem;}
+.auth-card p.sub{color:var(--gray);font-size:.9rem;margin-bottom:1.8rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.75rem 1rem;border:1.5px solid var(--gray-border);border-radius:var(--radius);font-family:var(--font);font-size:.9rem;outline:none;transition:.2s;background:var(--white);color:var(--dark);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,60,225,0.1);}
+.pw-wrap{position:relative;}
+.pw-toggle{position:absolute;right:1rem;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--gray);user-select:none;}
+.validation-msg{font-size:.78rem;margin-top:.3rem;}
+.validation-msg.error{color:var(--danger);}
+.validation-msg.success{color:var(--success);}
+.auth-switch{text-align:center;margin-top:1.2rem;font-size:.88rem;color:var(--gray);}
+.auth-switch a{color:var(--primary);font-weight:600;cursor:pointer;}
+#page-welcome{background:linear-gradient(135deg,#1A1A2E 0%,#16213E 50%,#0F3460 100%);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;}
+#page-welcome::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(108,60,225,0.2),transparent 70%);top:-200px;left:-200px;}
+.welcome-content{position:relative;z-index:1;max-width:600px;padding:2rem;}
+.welcome-emoji{font-size:4rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.welcome-content h1{font-size:2.8rem;font-weight:800;color:#fff;margin-bottom:1rem;line-height:1.2;}
+.welcome-content h1 span{background:linear-gradient(135deg,#A78BFA,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.welcome-content p{color:rgba(255,255,255,.75);font-size:1.1rem;margin-bottom:2rem;line-height:1.7;}
+.floating-cards{display:flex;gap:1rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;}
+.f-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:.7rem 1.2rem;color:#fff;font-size:.85rem;display:flex;align-items:center;gap:.5rem;}
+#page-details{justify-content:center;align-items:center;background:linear-gradient(135deg,#F3F0FF,#EEF4FF);}
+.details-card{background:var(--white);border-radius:var(--radius-xl);padding:2.5rem;width:100%;max-width:500px;box-shadow:var(--shadow-lg);}
+.skip-btn{background:none;border:none;color:var(--gray);cursor:pointer;font-family:var(--font);font-size:.9rem;font-weight:500;padding:.5rem 1rem;border-radius:8px;transition:.2s;}
+.skip-btn:hover{color:var(--primary);background:var(--gray-light);}
+#page-home{background:var(--bg);}
+.home-hero{background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--blue));padding:3rem 2rem;text-align:center;color:#fff;}
+.home-hero h2{font-size:2.2rem;font-weight:700;margin-bottom:.5rem;}
+.home-hero p{opacity:.85;font-size:1rem;margin-bottom:1.5rem;}
+.search-wrap{position:relative;max-width:520px;margin:0 auto;}
+.search-wrap input{width:100%;padding:1rem 3.5rem 1rem 1.5rem;border-radius:50px;border:none;font-family:var(--font);font-size:1rem;outline:none;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+.search-wrap button{position:absolute;right:.4rem;top:50%;transform:translateY(-50%);background:var(--primary);color:#fff;border:none;border-radius:40px;padding:.6rem 1.2rem;cursor:pointer;font-family:var(--font);font-weight:600;font-size:.9rem;}
+.search-suggestions{position:absolute;top:110%;left:0;right:0;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:50;overflow:hidden;}
+.search-suggestions div{padding:.75rem 1.2rem;cursor:pointer;font-size:.9rem;color:var(--dark);transition:.15s;display:flex;align-items:center;gap:.7rem;}
+.search-suggestions div:hover{background:var(--gray-light);color:var(--primary);}
+.services-split{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.service-col{padding:2.5rem;}
+.col-home{background:linear-gradient(160deg,#FFF7ED,#FFFBF5);}
+.col-tech{background:linear-gradient(160deg,#EFF6FF,#F0F9FF);}
+.col-title{font-size:1.5rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;}
+.col-home .col-title{color:#C2410C;}
+.col-tech .col-title{color:#1D4ED8;}
+.col-desc{color:var(--gray);font-size:.9rem;margin-bottom:1.5rem;}
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.8rem;}
+.cat-card{background:var(--white);border-radius:var(--radius);padding:1rem;text-align:center;cursor:pointer;transition:all .25s;border:2px solid transparent;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.cat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.col-home .cat-card:hover{border-color:var(--warm);}
+.col-tech .cat-card:hover{border-color:var(--blue);}
+.cat-icon{font-size:2rem;margin-bottom:.5rem;}
+.cat-name{font-size:.82rem;font-weight:600;}
+.cat-count{font-size:.72rem;color:var(--gray);margin-top:.2rem;}
+#page-subcategory{background:var(--bg);}
+.page-header{background:linear-gradient(135deg,var(--primary),var(--blue));padding:2rem;color:#fff;}
+.page-header h2{font-size:1.8rem;font-weight:700;}
+.page-header p{opacity:.85;margin-top:.3rem;}
+.back-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;padding:.4rem 1rem;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:.85rem;margin-bottom:1rem;display:inline-flex;align-items:center;gap:.4rem;}
+.service-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;padding:2rem;}
+.service-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);transition:all .25s;cursor:pointer;}
+.service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.service-card-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.service-card-body{padding:1.2rem;}
+.service-card-body h4{font-size:1rem;font-weight:700;margin-bottom:.3rem;}
+.service-card-body p{font-size:.82rem;color:var(--gray);margin-bottom:.8rem;line-height:1.5;}
+.price-row{display:flex;align-items:center;justify-content:space-between;}
+.price{font-size:1rem;font-weight:700;color:var(--primary);}
+.duration{font-size:.75rem;color:var(--gray);background:var(--gray-light);padding:.2rem .6rem;border-radius:6px;}
+#page-booking{background:var(--bg);}
+.booking-layout{display:grid;grid-template-columns:1fr 360px;gap:1.5rem;padding:2rem;max-width:1100px;margin:0 auto;}
+.booking-form-card{background:var(--white);border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow);}
+.section-title{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.radio-group{display:flex;gap:.8rem;flex-wrap:wrap;}
+.radio-opt{display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.5rem .9rem;border:1.5px solid var(--gray-border);border-radius:8px;transition:.2s;font-size:.88rem;}
+.radio-opt:hover,.radio-opt.selected{border-color:var(--primary);background:#F3F0FF;color:var(--primary);}
+.suggestion-box{border-radius:var(--radius);padding:1rem 1.2rem;margin-top:1rem;font-size:.88rem;display:flex;align-items:flex-start;gap:.7rem;line-height:1.5;}
+.suggestion-box.good{background:#ECFDF5;border-left:4px solid var(--success);color:#065F46;}
+.suggestion-box.warn{background:#FFFBEB;border-left:4px solid var(--accent);color:#92400E;}
+.suggestion-box.danger{background:#FEF2F2;border-left:4px solid var(--danger);color:#991B1B;}
+.booking-summary{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);position:sticky;top:80px;height:fit-content;}
+.summary-row{display:flex;justify-content:space-between;font-size:.88rem;padding:.5rem 0;border-bottom:1px solid var(--gray-border);}
+.summary-total{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;margin-top:.8rem;padding-top:.8rem;border-top:2px solid var(--primary);}
+#page-workers{background:var(--bg);}
+.workers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem;padding:2rem;}
+.worker-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);text-align:center;transition:all .25s;cursor:pointer;border:2px solid transparent;}
+.worker-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.worker-card.selected{border-color:var(--primary);background:#F3F0FF;}
+.worker-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;}
+.worker-name{font-size:1rem;font-weight:700;margin-bottom:.3rem;}
+.worker-exp{font-size:.82rem;color:var(--gray);margin-bottom:.6rem;}
+.stars{color:#F59E0B;font-size:.95rem;}
+.trust-badge{display:inline-block;background:#ECFDF5;color:#065F46;font-size:.72rem;font-weight:600;padding:.25rem .7rem;border-radius:20px;margin:.5rem 0;}
+.lang-badge{display:inline-block;background:var(--gray-light);color:var(--gray);font-size:.72rem;padding:.2rem .6rem;border-radius:6px;margin-right:.3rem;}
+.worker-actions{display:flex;gap:.6rem;margin-top:1rem;}
+.worker-actions .btn{flex:1;justify-content:center;}
+#page-confirm{background:linear-gradient(135deg,#ECFDF5,#F0FDF4,#FFFBF5);justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.confetti-piece{position:absolute;border-radius:2px;animation:confetti-fall linear infinite;}
+@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+.confirm-card{background:var(--white);border-radius:var(--radius-xl);padding:3rem 2.5rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.12);text-align:center;position:relative;z-index:1;}
+.success-icon{width:80px;height:80px;background:linear-gradient(135deg,var(--success),#34D399);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem;animation:pop .4s ease-out;color:#fff;font-weight:700;}
+@keyframes pop{0%{transform:scale(0);}70%{transform:scale(1.1);}100%{transform:scale(1);}}
+.confirm-card h2{font-size:1.8rem;font-weight:800;margin-bottom:.5rem;}
+.booking-id{background:var(--gray-light);border-radius:8px;padding:.5rem 1rem;font-size:.85rem;color:var(--gray);margin:.5rem 0 1.5rem;font-weight:600;}
+.confirm-details{background:var(--gray-light);border-radius:var(--radius);padding:1.2rem;text-align:left;margin-bottom:1.5rem;}
+.cd-row{display:flex;justify-content:space-between;font-size:.88rem;padding:.35rem 0;}
+.cd-label{color:var(--gray);}
+.cd-val{font-weight:600;}
+.payment-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.5rem;}
+.pay-opt{padding:.8rem;border:1.5px solid var(--gray-border);border-radius:var(--radius);text-align:center;cursor:pointer;font-size:.82rem;font-weight:600;transition:.2s;}
+.pay-opt:hover,.pay-opt.selected{border-color:var(--primary);background:#F3F0FF;color:var(--primary);}
+#page-tracking{background:var(--bg);}
+.tracking-card{background:var(--white);border-radius:var(--radius-lg);padding:2rem;max-width:560px;margin:2rem auto;box-shadow:var(--shadow);}
+.step-item{display:flex;gap:1rem;margin-bottom:1.5rem;align-items:flex-start;}
+.step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;font-weight:700;}
+.step-dot.done{background:var(--success);color:#fff;}
+.step-dot.active{background:var(--primary);color:#fff;animation:pulse 1.5s infinite;}
+.step-dot.pending{background:var(--gray-light);color:var(--gray);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(108,60,225,0.4);}50%{box-shadow:0 0 0 8px rgba(108,60,225,0);}}
+.step-connector{width:2px;background:var(--gray-border);height:20px;margin:4px 0 0 17px;}
+.step-connector.done{background:var(--success);}
+.step-info h4{font-size:.95rem;font-weight:600;}
+.step-info p{font-size:.8rem;color:var(--gray);}
+.step-info.done h4{color:var(--success);}
+.step-info.active h4{color:var(--primary);}
+#page-dashboard{background:var(--bg);}
+.dashboard-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px);}
+.sidebar{background:var(--white);border-right:1px solid var(--gray-border);padding:1.5rem 0;}
+.sidebar-logo{padding:0 1.5rem 1.5rem;font-size:1.1rem;font-weight:700;border-bottom:1px solid var(--gray-border);margin-bottom:.8rem;}
+.sidebar-item{display:flex;align-items:center;gap:.8rem;padding:.75rem 1.5rem;cursor:pointer;font-size:.9rem;font-weight:500;color:var(--gray);transition:.2s;}
+.sidebar-item:hover,.sidebar-item.active{background:#F3F0FF;color:var(--primary);}
+.sidebar-item.active{border-right:3px solid var(--primary);}
+.dashboard-main{padding:2rem;overflow-y:auto;}
+.dash-welcome{margin-bottom:2rem;}
+.dash-welcome h2{font-size:1.6rem;font-weight:700;}
+.dash-welcome p{color:var(--gray);font-size:.9rem;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--white);border-radius:var(--radius-lg);padding:1.2rem;box-shadow:var(--shadow);}
+.stat-val{font-size:1.8rem;font-weight:800;margin-bottom:.2rem;}
+.stat-label{font-size:.8rem;color:var(--gray);font-weight:500;}
+.stat-card.purple .stat-val{color:var(--primary);}
+.stat-card.blue .stat-val{color:var(--blue);}
+.stat-card.green .stat-val{color:var(--success);}
+.stat-card.amber .stat-val{color:var(--accent);}
+.bookings-table{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;}
+.table-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--gray-border);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:space-between;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:.9rem 1rem;font-size:.8rem;font-weight:600;color:var(--gray);background:var(--gray-light);text-transform:uppercase;letter-spacing:.5px;}
+td{padding:.9rem 1rem;font-size:.88rem;border-bottom:1px solid var(--gray-border);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#F9F8FF;}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;}
+.badge-success{background:#ECFDF5;color:#065F46;}
+.badge-info{background:#EFF6FF;color:#1E40AF;}
+.badge-danger{background:#FEF2F2;color:#991B1B;}
+.notif-list{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;margin-top:1.5rem;}
+.notif-item{padding:1rem 1.5rem;border-bottom:1px solid var(--gray-border);display:flex;gap:.8rem;align-items:flex-start;}
+.notif-item:last-child{border-bottom:none;}
+.notif-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.profile-card{background:var(--white);border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow);text-align:center;margin-bottom:1.5rem;}
+.profile-avatar{width:90px;height:90px;background:linear-gradient(135deg,var(--primary),var(--blue-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:700;color:#fff;margin:0 auto 1rem;}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:#fff;padding:.9rem 1.4rem;border-radius:var(--radius);box-shadow:var(--shadow-lg);font-size:.9rem;z-index:9999;transform:translateX(200%);transition:.3s;display:flex;align-items:center;gap:.7rem;}
+.toast.show{transform:translateX(0);}
+.toast.success{background:var(--success);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:999;}
+.modal-box{background:var(--white);border-radius:var(--radius-xl);padding:2rem;max-width:380px;width:90%;text-align:center;}
+.modal-box h3{font-size:1.2rem;font-weight:700;margin-bottom:.8rem;}
+.modal-box p{color:var(--gray);font-size:.9rem;margin-bottom:1.5rem;}
+.modal-actions{display:flex;gap:.8rem;justify-content:center;}
+/* CITY MODAL */
+.city-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(3px);}
+.city-modal{background:var(--white);border-radius:var(--radius-xl);width:92%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.2);}
+.city-modal-head{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--gray-border);}
+.city-modal-head h3{font-size:1.2rem;font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.city-search-wrap{position:relative;}
+.city-search-wrap input{width:100%;padding:.7rem 1rem .7rem 2.5rem;border:1.5px solid var(--gray-border);border-radius:var(--radius);font-family:var(--font);font-size:.9rem;outline:none;transition:.2s;}
+.city-search-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,60,225,0.1);}
+.city-search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--gray);font-size:1rem;}
+.city-modal-body{overflow-y:auto;padding:1rem 1.5rem 1.5rem;flex:1;}
+.city-district-label{font-size:.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin:1rem 0 .5rem;padding-bottom:.3rem;border-bottom:1px solid var(--gray-border);}
+.city-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem;}
+.city-chip{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--gray-border);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;background:var(--white);color:var(--dark);}
+.city-chip:hover{border-color:var(--primary);color:var(--primary);background:#F3F0FF;}
+.city-chip.selected{background:var(--primary);color:#fff;border-color:var(--primary);}
+.city-chip.popular{border-color:var(--accent);color:#92400E;background:#FFFBEB;}
+.city-chip.popular:hover,.city-chip.popular.selected{background:var(--accent);color:#fff;border-color:var(--accent);}
+/* city pill in nav */
+.city-pill{display:flex;align-items:center;gap:.4rem;background:var(--gray-light);border:1.5px solid var(--gray-border);border-radius:50px;padding:.35rem .9rem;cursor:pointer;font-size:.85rem;font-weight:500;color:var(--dark);transition:.2s;white-space:nowrap;}
+.city-pill:hover{border-color:var(--primary);color:var(--primary);background:#F3F0FF;}
+.city-pill .city-pin{color:var(--primary);font-size:1rem;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast">Action completed</div>
+
+<!-- CITY MODAL -->
+<div class="city-modal-overlay hidden" id="cityModal">
+  <div class="city-modal">
+    <div class="city-modal-head">
+      <h3>📍 Select Your City</h3>
+      <div class="city-search-wrap">
+        <span class="city-search-icon">🔍</span>
+        <input type="text" id="city-search-input" placeholder="Search city in Tamil Nadu..." oninput="filterCities()">
+      </div>
+    </div>
+    <div class="city-modal-body" id="city-modal-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="cancelModal">
+  <div class="modal-box">
+    <div style="font-size:2.5rem;margin-bottom:.8rem;">⚠️</div>
+    <h3>Cancel Booking?</h3>
+    <p>Are you sure you want to cancel? This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeModal()">Keep Booking</button>
+      <button class="btn btn-sm" style="background:var(--danger);color:#fff;" onclick="confirmCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: REGISTER -->
+<div class="page" id="page-register">
+  <div class="auth-card">
+    <div style="text-align:center;margin-bottom:1.5rem;"><div class="logo" style="font-size:2rem;">Neat<span>Aura</span></div><div style="font-size:.8rem;color:var(--gray);margin-top:.3rem;">Smart Home Services</div></div>
+    <h2>Create Account</h2>
+    <p class="sub">Join thousands booking trusted workers</p>
+    <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Enter your username" oninput="validateUsername()"><div class="validation-msg" id="username-msg"></div></div>
+    <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" oninput="validateEmail()"><div class="validation-msg" id="email-msg"></div></div>
+    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="reg-password" placeholder="Min. 8 characters" oninput="validatePassword()"><span class="pw-toggle" onclick="togglePw('reg-password',this)">👁</span></div><div class="validation-msg" id="password-msg"></div></div>
+    <div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input type="password" id="reg-confirm" placeholder="Re-enter password" oninput="validateConfirm()"><span class="pw-toggle" onclick="togglePw('reg-confirm',this)">👁</span></div><div class="validation-msg" id="confirm-msg"></div></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doRegister()">Create Account →</button>
+    <div class="auth-switch">Already have an account? <a onclick="showPage('page-login')">Sign In</a></div>
+  </div>
+</div>
+
+<!-- PAGE: LOGIN -->
+<div class="page hidden" id="page-login" style="justify-content:center;align-items:center;background:linear-gradient(135deg,#F3F0FF,#EEF4FF);">
+  <div class="auth-card">
+    <div style="text-align:center;margin-bottom:1.5rem;"><div class="logo" style="font-size:2rem;">Neat<span>Aura</span></div></div>
+    <h2>Welcome Back 👋</h2>
+    <p class="sub">Sign in to continue booking services</p>
+    <div class="form-group"><label>Email Address</label><input type="email" id="login-email" value="demo@neataura.com"></div>
+    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="login-password" value="password123"><span class="pw-toggle" onclick="togglePw('login-password',this)">👁</span></div></div>
+    <div style="text-align:right;margin-bottom:1rem;"><a style="font-size:.83rem;color:var(--primary);cursor:pointer;">Forgot password?</a></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doLogin()">Sign In →</button>
+    <div class="auth-switch">New here? <a onclick="showPage('page-register')">Create an account</a></div>
+  </div>
+</div>
+
+<!-- PAGE: WELCOME -->
+<div class="page hidden" id="page-welcome">
+  <div class="welcome-content">
+    <div class="welcome-emoji">✨</div>
+    <h1>Welcome back,<br><span id="welcome-name">Varsha</span> 👋</h1>
+    <p>Book trusted, verified workers for your daily home and technical needs — fast, easy, and reliable.</p>
+    <div class="floating-cards">
+      <div class="f-card">🏠 Home Services</div>
+      <div class="f-card">🛠 Technical Services</div>
+      <div class="f-card">⭐ 4.9 Rated Workers</div>
+      <div class="f-card">🔒 Verified & Trusted</div>
+    </div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem;" onclick="showPage('page-details')">Get Started →</button>
+      <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="showPage('page-home')">Skip Setup</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: DETAILS -->
+<div class="page hidden" id="page-details">
+  <div style="display:flex;justify-content:center;align-items:center;flex:1;padding:2rem;">
+    <div class="details-card">
+      <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.3rem;">Your Details</h2>
+      <p style="color:var(--gray);font-size:.88rem;margin-bottom:1.8rem;">Help us serve you better (optional)</p>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 9876543210"></div>
+      </div>
+      <div class="form-group"><label>Address</label><textarea placeholder="Street address..." rows="2" style="resize:none;"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>City</label><select id="details-city" onchange="applyDetailsCity()"><option value="">Select City</option></select></div>
+        <div class="form-group"><label>Pincode</label><input type="text" placeholder="600001"></div>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:.5rem;">
+        <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="showPage('page-home')">Save & Continue →</button>
+        <button class="skip-btn" onclick="showPage('page-home')">Skip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: HOME -->
+<div class="page hidden" id="page-home">
+  <nav>
+    <div class="logo">Neat<span>Aura</span></div>
+    <div class="nav-links">
+      <div class="city-pill" onclick="openCityModal()">
+        <span class="city-pin">📍</span>
+        <span id="nav-city-label">Select City</span>
+        <span style="color:var(--gray);font-size:.75rem;">▼</span>
+      </div>
+      <a onclick="showPage('page-home')">Home</a>
+      <a onclick="showPage('page-tracking')">Track Order</a>
+      <a onclick="showPage('page-dashboard')">Dashboard</a>
+      <a onclick="showPage('page-login')" class="nav-btn">Logout</a>
+    </div>
+  </nav>
+  <div class="home-hero">
+    <h2>What do you need today?</h2>
+    <p id="hero-city-text">Trusted workers for every home need — at your doorstep</p>
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Search cleaning, cooking, plumbing..." oninput="showSuggestions()" onblur="hideSuggestions()">
+      <button onclick="showToast('Searching...','')">Search</button>
+      <div class="search-suggestions hidden" id="search-suggestions"></div>
+    </div>
+  </div>
+  <div class="services-split">
+    <div class="service-col col-home">
+      <div class="col-title">🏠 Home Services</div>
+      <div class="col-desc">Cleaning, cooking, care & more for your home</div>
+      <div class="cats-grid" id="home-cats"></div>
+    </div>
+    <div class="service-col col-tech">
+      <div class="col-title">🛠 Technical Services</div>
+      <div class="col-desc">Electrical, plumbing, repair & security</div>
+      <div class="cats-grid" id="tech-cats"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: SUBCATEGORY -->
+<div class="page hidden" id="page-subcategory">
+  <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-home')">← Home</a><a onclick="showPage('page-dashboard')">Dashboard</a></div></nav>
+  <div class="page-header" id="subcat-header">
+    <button class="back-btn" onclick="showPage('page-home')">← Back</button>
+    <h2 id="subcat-title">Services</h2>
+    <p id="subcat-desc">Choose the service you need</p>
+  </div>
+  <div class="service-cards-grid" id="subcat-cards"></div>
+</div>
+
+<!-- PAGE: BOOKING -->
+<div class="page hidden" id="page-booking">
+  <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-subcategory')">← Back</a></div></nav>
+  <div class="page-header">
+    <button class="back-btn" onclick="showPage('page-subcategory')">← Back</button>
+    <h2 id="booking-service-name">Book Service</h2>
+    <p>Fill in your booking details</p>
+  </div>
+  <div class="booking-layout">
+    <div class="booking-form-card">
+      <div class="section-title">📋 Booking Details</div>
+      <div class="form-row">
+        <div class="form-group"><label>Number of Workers</label><select id="b-workers" onchange="updateSuggestion();updateSummary()"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        <div class="form-group"><label>Number of Days</label><select id="b-days" onchange="updateSummary()"><option>1</option><option>2</option><option>3</option><option>7</option><option>14</option><option>30</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Working Hours / Day</label><select id="b-hours" onchange="updateSuggestion();updateSummary()"><option>2</option><option>4</option><option>6</option><option>8</option></select></div>
+        <div class="form-group"><label>Preferred Date</label><input type="date" id="b-date"></div>
+      </div>
+      <div class="form-group"><label>Preferred Time</label><input type="time" id="b-time" value="09:00"></div>
+      <div class="form-group"><label>📍 Service City</label><select id="b-city" onchange="updateSummary()"><option value="">Select Tamil Nadu City</option></select></div>
+      <div class="form-group"><label>Gender Preference</label>
+        <div class="radio-group">
+          <div class="radio-opt selected" onclick="selectGender(this,'Any')">Any</div>
+          <div class="radio-opt" onclick="selectGender(this,'Male')">Male</div>
+          <div class="radio-opt" onclick="selectGender(this,'Female')">Female</div>
+        </div>
+      </div>
+      <div class="form-group"><label>Work Description</label><textarea id="b-desc" rows="3" placeholder="Describe your requirements..." oninput="updateSuggestion()" style="resize:none;"></textarea></div>
+      <div id="suggestion-box"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;" onclick="showPage('page-workers')">Find Workers →</button>
+    </div>
+    <div class="booking-summary">
+      <div class="section-title">🧾 Booking Summary</div>
+      <div id="summary-rows"></div>
+      <div class="summary-total"><span>Total Estimate</span><span id="summary-total" style="color:var(--primary);">₹0</span></div>
+      <div style="margin-top:1rem;font-size:.78rem;color:var(--gray);">* Final price confirmed after worker selection</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: WORKERS -->
+<div class="page hidden" id="page-workers">
+  <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-booking')">← Back</a></div></nav>
+  <div class="page-header">
+    <button class="back-btn" onclick="showPage('page-booking')">← Back</button>
+    <h2>Select Your Worker</h2>
+    <p>Verified, rated, and trusted professionals</p>
+  </div>
+  <div class="workers-grid" id="workers-grid"></div>
+  <div style="text-align:center;padding:1.5rem 1.5rem 2rem;">
+    <button class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem;" onclick="showConfirm()">Confirm Booking →</button>
+  </div>
+</div>
+
+<!-- PAGE: CONFIRM -->
+<div class="page hidden" id="page-confirm">
+  <div class="confirm-card">
+    <div class="success-icon">✓</div>
+    <h2>Booking Confirmed! 🎉</h2>
+    <p style="color:var(--gray);margin-bottom:.5rem;">Your worker is on the way</p>
+    <div class="booking-id">Booking ID: #NA-<span id="booking-id-val">00000</span></div>
+    <div class="confirm-details" id="confirm-details"></div>
+    <div style="font-weight:700;font-size:.95rem;margin-bottom:.8rem;">Choose Payment Method</div>
+    <div class="payment-opts">
+      <div class="pay-opt selected" onclick="selectPay(this)">📱 UPI</div>
+      <div class="pay-opt" onclick="selectPay(this)">💳 Card</div>
+      <div class="pay-opt" onclick="selectPay(this)">💵 Cash</div>
+    </div>
+    <div style="display:flex;gap:.8rem;">
+      <button class="btn btn-success" style="flex:1;justify-content:center;" onclick="showPage('page-tracking')">Track Booking →</button>
+      <button class="btn btn-outline btn-sm" onclick="showPage('page-home')">Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: TRACKING -->
+<div class="page hidden" id="page-tracking">
+  <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-home')">Home</a><a onclick="showPage('page-dashboard')">Dashboard</a></div></nav>
+  <div style="padding:2rem;max-width:600px;margin:0 auto;">
+    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:.3rem;">Live Booking Status</h2>
+    <p style="color:var(--gray);font-size:.88rem;margin-bottom:1.5rem;">Booking #NA-<span id="track-id">28471</span></p>
+    <div class="tracking-card">
+      <div id="tracking-steps"></div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-border);display:flex;gap:1rem;">
+        <button class="btn btn-outline btn-sm" onclick="openModal()">Cancel Booking</button>
+        <button class="btn btn-primary btn-sm" onclick="showPage('page-dashboard')">View Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: DASHBOARD -->
+<div class="page hidden" id="page-dashboard">
+  <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-home')">Home</a><a onclick="showPage('page-login')" class="nav-btn">Logout</a></div></nav>
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">Neat<span style="color:var(--accent);">Aura</span></div>
+      <div class="sidebar-item active" onclick="showDash('overview')"><span style="font-size:1.2rem;">📊</span> Overview</div>
+      <div class="sidebar-item" onclick="showDash('bookings')"><span style="font-size:1.2rem;">📋</span> My Bookings</div>
+      <div class="sidebar-item" onclick="showDash('profile')"><span style="font-size:1.2rem;">👤</span> My Profile</div>
+      <div class="sidebar-item" onclick="showDash('notifications')"><span style="font-size:1.2rem;">🔔</span> Notifications</div>
+      <div class="sidebar-item" onclick="showPage('page-home')" style="color:var(--primary);margin-top:1rem;"><span style="font-size:1.2rem;">➕</span> New Booking</div>
+    </div>
+    <div class="dashboard-main" id="dashboard-main"></div>
+  </div>
+</div>
+
+<script>
+var currentUser='Varsha';
+var selectedGender='Any';
+var selectedWorker=null;
+var selectedService=null;
+var basePrice=300;
+var selectedCity='';
+
+var tamilNaduCities={
+  'Popular Cities':['Chennai','Coimbatore','Madurai','Tiruchirappalli','Salem','Tirunelveli','Erode','Vellore','Thoothukudi','Tiruppur'],
+  'Chennai & Districts':['Chennai','Kancheepuram','Chengalpattu','Tiruvallur','Ranipet'],
+  'Coimbatore & Nilgiris':['Coimbatore','Tiruppur','Ooty (Udhagamandalam)','Pollachi','Mettupalayam','Gudalur'],
+  'Madurai & Surroundings':['Madurai','Dindigul','Virudhunagar','Sivaganga','Ramanathapuram'],
+  'Salem & Central TN':['Salem','Namakkal','Dharmapuri','Krishnagiri','Hosur'],
+  'Tiruchirappalli':['Tiruchirappalli','Karur','Ariyalur','Perambalur','Musiri'],
+  'Tirunelveli & South':['Tirunelveli','Thoothukudi','Nagercoil','Kanniyakumari','Tenkasi','Sankarankovil'],
+  'Vellore & North':['Vellore','Tiruvannamalai','Villupuram','Kallakurichi','Cuddalore'],
+  'Delta Region':['Thanjavur','Nagapattinam','Tiruvarur','Kumbakonam','Mayiladuthurai','Papanasam'],
+  'Erode & Kongu':['Erode','Gobichettipalayam','Bhavani','Sathyamangalam','Anthiyur'],
+  'Kanchipuram & GST Road':['Kancheepuram','Sriperumbudur','Tambaram','Poonamallee','Maraimalai Nagar'],
+  'Puducherry Borders':['Villupuram','Tindivanam','Gingee','Madurantakam'],
+  'Western Ghats':['Kodaikanal','Yercaud','Valparai','Kotagiri','Coonoor']
+};
+
+function openCityModal(){
+  document.getElementById('cityModal').classList.remove('hidden');
+  document.getElementById('city-search-input').value='';
+  renderCityList(tamilNaduCities);
+  setTimeout(function(){document.getElementById('city-search-input').focus();},100);
+}
+function closeCityModal(){
+  document.getElementById('cityModal').classList.add('hidden');
+}
+function renderCityList(data){
+  var body=document.getElementById('city-modal-body');
+  var html='';
+  for(var district in data){
+    var cities=data[district];
+    var isPopular=district==='Popular Cities';
+    html+='<div class="city-district-label">'+district+'</div>';
+    html+='<div class="city-chips">';
+    cities.forEach(function(city){
+      var sel=city===selectedCity?' selected':'';
+      var pop=isPopular?' popular':'';
+      html+='<div class="city-chip'+sel+pop+'" onclick="selectCity(\''+city+'\')">'+city+'</div>';
+    });
+    html+='</div>';
+  }
+  body.innerHTML=html;
+}
+function filterCities(){
+  var q=document.getElementById('city-search-input').value.toLowerCase().trim();
+  if(!q){renderCityList(tamilNaduCities);return;}
+  var filtered={};
+  for(var district in tamilNaduCities){
+    var matches=tamilNaduCities[district].filter(function(c){return c.toLowerCase().indexOf(q)>=0;});
+    if(matches.length) filtered[district]=matches;
+  }
+  if(Object.keys(filtered).length===0){
+    document.getElementById('city-modal-body').innerHTML='<div style="text-align:center;padding:2rem;color:var(--gray);">😕 No city found. Try a different name.</div>';
+  } else {
+    renderCityList(filtered);
+  }
+}
+function selectCity(city){
+  selectedCity=city;
+  document.getElementById('nav-city-label').textContent=city;
+  document.getElementById('hero-city-text').textContent='Trusted workers in '+city+' — at your doorstep 🏙️';
+  closeCityModal();
+  showToast('📍 Location set to '+city,'success');
+}
+// close modal on overlay click
+document.addEventListener('click',function(e){
+  var modal=document.getElementById('cityModal');
+  if(e.target===modal) closeCityModal();
+});
+
+var homeCategories=[
+  {name:'Cleaning',icon:'🧹',count:'4 services',subs:[
+    {name:'Home Cleaning',desc:'Full home deep clean by experts',price:'₹299',duration:'3-4 hrs',img:'🧹',base:299},
+    {name:'Bathroom Cleaning',desc:'Sanitize & disinfect bathrooms',price:'₹149',duration:'1-2 hrs',img:'🚿',base:149},
+    {name:'Kitchen Cleaning',desc:'Grease removal & full scrub',price:'₹199',duration:'2-3 hrs',img:'🍳',base:199},
+    {name:'Deep Cleaning',desc:'Top-to-bottom intensive clean',price:'₹599',duration:'5-6 hrs',img:'✨',base:599}
+  ]},
+  {name:'Cooking',icon:'👩‍🍳',count:'4 services',subs:[
+    {name:'Veg Cooking',desc:'Fresh vegetarian meal prep daily',price:'₹249',duration:'2-3 hrs',img:'🥗',base:249},
+    {name:'Non-Veg Cooking',desc:'Chicken, fish & meat dishes',price:'₹299',duration:'2-3 hrs',img:'🍗',base:299},
+    {name:'Event Cooking',desc:'Party & event catering',price:'₹999',duration:'6-8 hrs',img:'🎉',base:999},
+    {name:'Daily Meal Prep',desc:'Regular daily tiffin service',price:'₹199',duration:'1-2 hrs',img:'🍱',base:199}
+  ]},
+  {name:'Driving',icon:'🚗',count:'4 services',subs:[
+    {name:'Personal Driver',desc:'Dedicated car driver for you',price:'₹499',duration:'8 hrs',img:'🚗',base:499},
+    {name:'Pickup & Drop',desc:'Airport or station transfers',price:'₹199',duration:'1-2 hrs',img:'✈️',base:199},
+    {name:'Temporary Driver',desc:'Short-term driving needs',price:'₹299',duration:'4 hrs',img:'🔑',base:299},
+    {name:'Night Driver',desc:'Safe late night drives',price:'₹399',duration:'4 hrs',img:'🌙',base:399}
+  ]},
+  {name:'Babysitting',icon:'👶',count:'4 services',subs:[
+    {name:'Infant Care',desc:'Certified infant caregivers',price:'₹349',duration:'8 hrs',img:'🍼',base:349},
+    {name:'Part-time Sitter',desc:'Flexible hourly babysitting',price:'₹199',duration:'4 hrs',img:'👶',base:199},
+    {name:'Full-time Sitter',desc:'Live-in nanny services',price:'₹699',duration:'12 hrs',img:'🤱',base:699},
+    {name:'School Pickup',desc:'Safe school pickup & care',price:'₹249',duration:'3 hrs',img:'🏫',base:249}
+  ]},
+  {name:'Gardening',icon:'🌿',count:'3 services',subs:[
+    {name:'Garden Maintenance',desc:'Pruning, watering & care',price:'₹349',duration:'3-4 hrs',img:'🌿',base:349},
+    {name:'Lawn Mowing',desc:'Neat & even lawn trimming',price:'₹249',duration:'2 hrs',img:'🌱',base:249},
+    {name:'Plant Setup',desc:'New garden planting design',price:'₹599',duration:'5 hrs',img:'🌸',base:599}
+  ]},
+  {name:'Laundry',icon:'👕',count:'2 services',subs:[
+    {name:'Wash & Fold',desc:'Clean laundry done at home',price:'₹199',duration:'2-3 hrs',img:'👕',base:199},
+    {name:'Iron & Press',desc:'Crisp clothes every time',price:'₹149',duration:'1-2 hrs',img:'👔',base:149}
+  ]},
+  {name:'Caretaker',icon:'🤝',count:'2 services',subs:[
+    {name:'Elder Care',desc:'Compassionate senior support',price:'₹599',duration:'12 hrs',img:'🏥',base:599},
+    {name:'Patient Care',desc:'Post-surgery home nursing',price:'₹799',duration:'12 hrs',img:'💊',base:799}
+  ]}
+];
+
+var techCategories=[
+  {name:'Electrical',icon:'⚡',count:'4 services',subs:[
+    {name:'Wiring',desc:'Safe home electrical wiring',price:'₹399',duration:'3-4 hrs',img:'⚡',base:399},
+    {name:'Fan Repair',desc:'Ceiling & table fan fix',price:'₹149',duration:'1 hr',img:'🌀',base:149},
+    {name:'Light Fixing',desc:'LED & bulb installations',price:'₹99',duration:'30 min',img:'💡',base:99},
+    {name:'Switchboard Repair',desc:'Safe switch & socket fix',price:'₹199',duration:'1-2 hrs',img:'🔌',base:199}
+  ]},
+  {name:'Plumbing',icon:'🔧',count:'4 services',subs:[
+    {name:'Leakage Repair',desc:'Stop pipe leaks fast',price:'₹249',duration:'2-3 hrs',img:'🔧',base:249},
+    {name:'Pipe Fixing',desc:'New pipe lay & repairs',price:'₹349',duration:'3-4 hrs',img:'🪛',base:349},
+    {name:'Tap Repair',desc:'Dripping tap fix & replace',price:'₹149',duration:'1 hr',img:'🚿',base:149},
+    {name:'Drain Cleaning',desc:'Blocked drain clearing',price:'₹199',duration:'1-2 hrs',img:'🏊',base:199}
+  ]},
+  {name:'Appliance',icon:'🔨',count:'4 services',subs:[
+    {name:'AC Repair',desc:'AC service & gas refill',price:'₹499',duration:'2-3 hrs',img:'❄️',base:499},
+    {name:'Fridge Repair',desc:'Cooling & compressor fix',price:'₹399',duration:'2-3 hrs',img:'🧊',base:399},
+    {name:'Washing Machine',desc:'All brand WM repairs',price:'₹349',duration:'2 hrs',img:'🫧',base:349},
+    {name:'TV Repair',desc:'Smart TV & LED repairs',price:'₹299',duration:'1-2 hrs',img:'📺',base:299}
+  ]},
+  {name:'Security',icon:'🔐',count:'2 services',subs:[
+    {name:'Watchman',desc:'24/7 property security',price:'₹699',duration:'12 hrs',img:'👮',base:699},
+    {name:'Security Support',desc:'Event & premises security',price:'₹499',duration:'8 hrs',img:'🔐',base:499}
+  ]}
+];
+
+var workers=[
+  {name:'Ravi Kumar',exp:'5 yrs',rating:'4.9',score:'98%',lang:['Tamil','English'],color:'#6C3CE1',init:'RK'},
+  {name:'Meena Devi',exp:'3 yrs',rating:'4.8',score:'96%',lang:['Tamil','Hindi'],color:'#E85D9A',init:'MD'},
+  {name:'Arjun Raj',exp:'7 yrs',rating:'5.0',score:'99%',lang:['English','Tamil'],color:'#2563EB',init:'AR'},
+  {name:'Priya S.',exp:'4 yrs',rating:'4.7',score:'94%',lang:['Tamil'],color:'#10B981',init:'PS'},
+  {name:'Suresh V.',exp:'6 yrs',rating:'4.9',score:'97%',lang:['Tamil','Telugu'],color:'#F59E0B',init:'SV'},
+  {name:'Lakshmi N.',exp:'2 yrs',rating:'4.6',score:'92%',lang:['Tamil'],color:'#EF4444',init:'LN'}
+];
+
+var bookingHistory=[
+  {id:'NA-28471',service:'Home Cleaning',worker:'Ravi Kumar',date:'2024-01-15',status:'Completed',amount:'₹299'},
+  {id:'NA-28310',service:'AC Repair',worker:'Arjun Raj',date:'2024-01-10',status:'Completed',amount:'₹499'},
+  {id:'NA-28102',service:'Cooking',worker:'Meena Devi',date:'2024-01-05',status:'Active',amount:'₹249'},
+  {id:'NA-27890',service:'Plumbing',worker:'Suresh V.',date:'2023-12-28',status:'Cancelled',amount:'₹249'}
+];
+
+function getAllCities(){
+  var all=[];
+  for(var d in tamilNaduCities){tamilNaduCities[d].forEach(function(c){if(all.indexOf(c)<0)all.push(c);});}
+  return all.sort();
+}
+function populateCitySelects(){
+  var cities=getAllCities();
+  var opts=cities.map(function(c){return '<option value="'+c+'"'+(c===selectedCity?' selected':'')+'>'+c+'</option>';}).join('');
+  var bc=document.getElementById('b-city');
+  var dc=document.getElementById('details-city');
+  if(bc) bc.innerHTML='<option value="">Select Tamil Nadu City</option>'+opts;
+  if(dc) dc.innerHTML='<option value="">Select City</option>'+opts;
+  if(bc&&selectedCity) bc.value=selectedCity;
+}
+function applyDetailsCity(){
+  var v=document.getElementById('details-city').value;
+  if(v){selectCity(v);}
+}
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+  if(id==='page-home') renderHomeCategories();
+  if(id==='page-workers') renderWorkers();
+  if(id==='page-tracking') renderTracking();
+  if(id==='page-dashboard') showDash('overview');
+  if(id==='page-confirm') renderConfirm();
+  if(id==='page-booking'){
+    var d=new Date();d.setDate(d.getDate()+1);
+    document.getElementById('b-date').value=d.toISOString().split('T')[0];
+    populateCitySelects();
+    updateSuggestion();updateSummary();
+  }
+  if(id==='page-details') populateCitySelects();
+}
+
+function togglePw(id,el){
+  var inp=document.getElementById(id);
+  if(inp.type==='password'){inp.type='text';el.textContent='🙈';}
+  else{inp.type='password';el.textContent='👁';}
+}
+function validateUsername(){
+  var v=document.getElementById('reg-username').value;
+  var msg=document.getElementById('username-msg');
+  if(v.length<3){msg.className='validation-msg error';msg.textContent='Username must be at least 3 characters';}
+  else{msg.className='validation-msg success';msg.textContent='✓ Username available';}
+}
+function validateEmail(){
+  var v=document.getElementById('reg-email').value;
+  var msg=document.getElementById('email-msg');
+  if(!/\S+@\S+\.\S+/.test(v)){msg.className='validation-msg error';msg.textContent='Enter a valid email address';}
+  else{msg.className='validation-msg success';msg.textContent='✓ Valid email';}
+}
+function validatePassword(){
+  var v=document.getElementById('reg-password').value;
+  var msg=document.getElementById('password-msg');
+  if(v.length<8){msg.className='validation-msg error';msg.textContent='Password must be at least 8 characters';}
+  else{msg.className='validation-msg success';msg.textContent='✓ Strong password';}
+}
+function validateConfirm(){
+  var p=document.getElementById('reg-password').value;
+  var c=document.getElementById('reg-confirm').value;
+  var msg=document.getElementById('confirm-msg');
+  if(p!==c){msg.className='validation-msg error';msg.textContent='Passwords do not match';}
+  else if(c){msg.className='validation-msg success';msg.textContent='✓ Passwords match';}
+}
+function doRegister(){
+  var u=document.getElementById('reg-username').value;
+  if(!u){showToast('Please fill all fields','');return;}
+  currentUser=u||'User';
+  document.getElementById('welcome-name').textContent=currentUser;
+  showPage('page-welcome');
+  showToast('Account created!','success');
+}
+function doLogin(){
+  currentUser='Varsha';
+  document.getElementById('welcome-name').textContent=currentUser;
+  showPage('page-welcome');
+  showToast('Welcome back!','success');
+}
+
+function renderHomeCategories(){
+  var hc=document.getElementById('home-cats');
+  var tc=document.getElementById('tech-cats');
+  hc.innerHTML=homeCategories.map(function(c){
+    return '<div class="cat-card" onclick="openCategory(\'home\',\''+c.name+'\')"><div class="cat-icon">'+c.icon+'</div><div class="cat-name">'+c.name+'</div><div class="cat-count">'+c.count+'</div></div>';
+  }).join('');
+  tc.innerHTML=techCategories.map(function(c){
+    return '<div class="cat-card" onclick="openCategory(\'tech\',\''+c.name+'\')"><div class="cat-icon">'+c.icon+'</div><div class="cat-name">'+c.name+'</div><div class="cat-count">'+c.count+'</div></div>';
+  }).join('');
+}
+
+var searchTerms=['Cleaning','Cooking','Driving','Babysitting','Gardening','Laundry','Caretaker','Electrical','Plumbing','AC Repair','Fan Repair','Watchman','Deep Cleaning','Home Cleaning','Kitchen Cleaning'];
+function showSuggestions(){
+  var q=document.getElementById('search-input').value.toLowerCase();
+  if(!q){hideSuggestions();return;}
+  var matches=searchTerms.filter(function(t){return t.toLowerCase().indexOf(q)>=0;});
+  var box=document.getElementById('search-suggestions');
+  if(!matches.length){box.classList.add('hidden');return;}
+  box.classList.remove('hidden');
+  box.innerHTML=matches.slice(0,5).map(function(m){return '<div onmousedown="selectSearch(\''+m+'\')">🔍 '+m+'</div>';}).join('');
+}
+function hideSuggestions(){setTimeout(function(){document.getElementById('search-suggestions').classList.add('hidden');},200);}
+function selectSearch(t){document.getElementById('search-input').value=t;hideSuggestions();}
+
+function openCategory(type,name){
+  var cats=type==='home'?homeCategories:techCategories;
+  var cat=null;
+  for(var i=0;i<cats.length;i++){if(cats[i].name===name){cat=cats[i];break;}}
+  if(!cat)return;
+  var isHome=type==='home';
+  var hdr=document.getElementById('subcat-header');
+  hdr.style.background=isHome?'linear-gradient(135deg,#C2410C,#EA580C)':'linear-gradient(135deg,#1D4ED8,#2563EB)';
+  document.getElementById('subcat-title').textContent=cat.icon+' '+cat.name;
+  document.getElementById('subcat-desc').textContent='Choose the service you need';
+  var grid=document.getElementById('subcat-cards');
+  grid.innerHTML=cat.subs.map(function(s){
+    return '<div class="service-card" onclick="openBooking(\''+s.name+'\','+s.base+')"><div class="service-card-img" style="background:'+(isHome?'#FFF7ED':'#EFF6FF')+'">'+s.img+'</div><div class="service-card-body"><h4>'+s.name+'</h4><p>'+s.desc+'</p><div class="price-row"><span class="price">Starting '+s.price+'</span><span class="duration">⏱ '+s.duration+'</span></div><button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:.8rem;">Book Now</button></div></div>';
+  }).join('');
+  showPage('page-subcategory');
+}
+
+function openBooking(name,price){
+  selectedService=name;
+  basePrice=price;
+  document.getElementById('booking-service-name').textContent='Book: '+name;
+  showPage('page-booking');
+}
+function selectGender(el,val){
+  selectedGender=val;
+  document.querySelectorAll('.radio-opt').forEach(function(o){o.classList.remove('selected');});
+  el.classList.add('selected');
+}
+function updateSuggestion(){
+  var w=parseInt(document.getElementById('b-workers').value)||1;
+  var h=parseInt(document.getElementById('b-hours').value)||4;
+  var desc=document.getElementById('b-desc').value.toLowerCase();
+  var heavy=desc.indexOf('deep')>=0||desc.indexOf('full')>=0||desc.indexOf('heavy')>=0;
+  var box=document.getElementById('suggestion-box');
+  var html='';
+  if(h>=6&&w>=2){
+    html='<div class="suggestion-box good">✅ <div><strong>Smart AI Suggestion:</strong> Great plan! '+w+' workers for '+h+' hrs/day is ideal for this task. Estimated difficulty: <strong>Moderate</strong>. Completion: <strong>On time</strong>.</div></div>';
+  } else if(heavy&&w<2){
+    html='<div class="suggestion-box danger">⚠️ <div><strong>Heavy workload detected!</strong> Consider increasing to 2-3 workers or adding more hours. Estimated difficulty: <strong>High</strong>.</div></div>';
+  } else if(h<4){
+    html='<div class="suggestion-box warn">⚠️ <div><strong>Suggestion:</strong> '+h+' hrs may be insufficient. We recommend at least 4 hrs for quality results.</div></div>';
+  } else {
+    html='<div class="suggestion-box good">✅ <div><strong>Smart AI Suggestion:</strong> Your plan looks good! Estimated difficulty: <strong>Easy</strong>. Expected to complete <strong>within time</strong>.</div></div>';
+  }
+  box.innerHTML=html;
+}
+function updateSummary(){
+  var w=parseInt(document.getElementById('b-workers').value)||1;
+  var d=parseInt(document.getElementById('b-days').value)||1;
+  var h=parseInt(document.getElementById('b-hours').value)||4;
+  var total=basePrice*w*d;
+  var rows=document.getElementById('summary-rows');
+  var cityEl=document.getElementById('b-city');
+  var cityVal=cityEl?cityEl.value:selectedCity;
+  rows.innerHTML='<div class="summary-row"><span>Service</span><span style="font-weight:600;">'+(selectedService||'Service')+'</span></div><div class="summary-row"><span>City</span><span style="font-weight:600;">'+(cityVal||selectedCity||'—')+'</span></div><div class="summary-row"><span>Workers</span><span>'+w+'</span></div><div class="summary-row"><span>Days</span><span>'+d+'</span></div><div class="summary-row"><span>Hours/day</span><span>'+h+'</span></div><div class="summary-row"><span>Base Price</span><span>₹'+basePrice+'/worker/day</span></div><div class="summary-row"><span>Gender Pref</span><span>'+selectedGender+'</span></div>';
+  document.getElementById('summary-total').textContent='₹'+total.toLocaleString('en-IN');
+}
+
+function renderWorkers(){
+  var grid=document.getElementById('workers-grid');
+  grid.innerHTML=workers.map(function(w,i){
+    var stars='★'.repeat(Math.round(parseFloat(w.rating)))+'☆'.repeat(5-Math.round(parseFloat(w.rating)));
+    var langs=w.lang.map(function(l){return '<span class="lang-badge">'+l+'</span>';}).join('');
+    return '<div class="worker-card" id="wcard-'+i+'" onclick="selectWorkerCard('+i+')"><div class="worker-avatar" style="background:'+w.color+'">'+w.init+'</div><div class="worker-name">'+w.name+'</div><div class="worker-exp">⏱ '+w.exp+' experience</div><div class="stars">'+stars+' '+w.rating+'</div><div class="trust-badge">🛡 Trust Score: '+w.score+'</div><div style="margin:.4rem 0;">'+langs+'</div><div class="worker-actions"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();showToast(\''+w.name+' profile\',\'\')">Profile</button><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();selectWorkerCard('+i+')">Select</button></div></div>';
+  }).join('');
+}
+function selectWorkerCard(i){
+  selectedWorker=workers[i];
+  document.querySelectorAll('.worker-card').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('wcard-'+i).classList.add('selected');
+  showToast(selectedWorker.name+' selected!','success');
+}
+function showConfirm(){
+  if(!selectedWorker){showToast('Please select a worker first','');return;}
+  showPage('page-confirm');
+}
+
+function renderConfirm(){
+  document.getElementById('booking-id-val').textContent=Math.floor(10000+Math.random()*90000);
+  var w=parseInt(document.getElementById('b-workers').value)||1;
+  var d2=parseInt(document.getElementById('b-days').value)||1;
+  var total=basePrice*w*d2;
+  var det=document.getElementById('confirm-details');
+  var confirmCity=document.getElementById('b-city')?document.getElementById('b-city').value:selectedCity;
+  det.innerHTML='<div class="cd-row"><span class="cd-label">Service</span><span class="cd-val">'+(selectedService||'Home Cleaning')+'</span></div><div class="cd-row"><span class="cd-label">City</span><span class="cd-val">📍 '+(confirmCity||selectedCity||'—')+'</span></div><div class="cd-row"><span class="cd-label">Worker</span><span class="cd-val">'+(selectedWorker?selectedWorker.name:'Ravi Kumar')+'</span></div><div class="cd-row"><span class="cd-label">Date</span><span class="cd-val">'+(document.getElementById('b-date').value||'Tomorrow')+'</span></div><div class="cd-row"><span class="cd-label">Time</span><span class="cd-val">'+(document.getElementById('b-time').value||'09:00')+'</span></div><div class="cd-row"><span class="cd-label">Duration</span><span class="cd-val">'+w+' worker(s) × '+d2+' day(s)</span></div><div class="cd-row"><span class="cd-label">Total</span><span class="cd-val" style="color:var(--primary);font-size:1rem;">₹'+total.toLocaleString('en-IN')+'</span></div>';
+  document.getElementById('track-id').textContent=document.getElementById('booking-id-val').textContent;
+  spawnConfetti();
+}
+function selectPay(el){
+  document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('selected');});
+  el.classList.add('selected');
+  showToast('Payment method selected','success');
+}
+function spawnConfetti(){
+  var colors=['#6C3CE1','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899'];
+  var cont=document.getElementById('page-confirm');
+  for(var i=0;i<24;i++){
+    var el=document.createElement('div');
+    el.className='confetti-piece';
+    var size=(6+Math.random()*10)+'px';
+    el.style.cssText='left:'+Math.random()*100+'%;top:-20px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(2+Math.random()*3)+'s;animation-delay:'+Math.random()*2+'s;width:'+size+';height:'+size+';';
+    cont.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},6000);
+  }
+}
+
+var trackSteps=[
+  {label:'Requested',desc:'Your booking has been received',state:'done'},
+  {label:'Accepted',desc:'Worker has accepted your booking',state:'done'},
+  {label:'On the Way',desc:'Worker is heading to your location',state:'active'},
+  {label:'Work Started',desc:'Service in progress',state:'pending'},
+  {label:'Completed',desc:'Service successfully delivered',state:'pending'}
+];
+function renderTracking(){
+  var cont=document.getElementById('tracking-steps');
+  cont.innerHTML=trackSteps.map(function(s,i){
+    var dot=s.state==='done'?'✓':s.state==='active'?'●':'○';
+    var conn=i<trackSteps.length-1?'<div class="step-connector '+(s.state==='done'?'done':'')+'"></div>':'';
+    return '<div class="step-item"><div style="display:flex;flex-direction:column;align-items:center;"><div class="step-dot '+s.state+'">'+dot+'</div>'+conn+'</div><div class="step-info '+s.state+'"><h4>'+s.label+'</h4><p>'+s.desc+'</p></div></div>';
+  }).join('');
+}
+
+function showDash(tab){
+  document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active');});
+  var items=document.querySelectorAll('.sidebar-item');
+  var tabIdx={'overview':0,'bookings':1,'profile':2,'notifications':3};
+  if(tabIdx[tab]!==undefined) items[tabIdx[tab]].classList.add('active');
+  var main=document.getElementById('dashboard-main');
+  if(tab==='overview'){
+    main.innerHTML='<div class="dash-welcome"><h2>Good morning, '+currentUser+'! 👋</h2><p>Here\'s what\'s happening with your bookings.</p></div><div class="stats-grid"><div class="stat-card purple"><div class="stat-val">7</div><div class="stat-label">Total Bookings</div></div><div class="stat-card green"><div class="stat-val">5</div><div class="stat-label">Completed</div></div><div class="stat-card blue"><div class="stat-val">1</div><div class="stat-label">Active</div></div><div class="stat-card amber"><div class="stat-val">₹2,847</div><div class="stat-label">Total Spent</div></div></div><div class="bookings-table"><div class="table-header">Recent Bookings <button class="btn btn-outline btn-sm" onclick="showDash(\'bookings\')">View All</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Action</th></tr></thead><tbody>'+bookingHistory.slice(0,3).map(function(b){return '<tr><td><code style="font-size:.8rem;">#'+b.id+'</code></td><td>'+b.service+'</td><td>'+b.worker+'</td><td>'+b.date+'</td><td><span class="badge '+(b.status==='Completed'?'badge-success':b.status==='Active'?'badge-info':'badge-danger')+'">'+b.status+'</span></td><td style="font-weight:600;">'+b.amount+'</td><td>'+(b.status==='Active'?'<button class="btn btn-outline btn-sm" onclick="openModal()">Cancel</button>':'<button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">Rebook</button>')+'</td></tr>';}).join('')+'</tbody></table></div>';
+  } else if(tab==='bookings'){
+    main.innerHTML='<div class="dash-welcome"><h2>My Bookings</h2><p>All your booking history</p></div><div class="bookings-table"><div class="table-header">All Bookings <button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">+ New Booking</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Actions</th></tr></thead><tbody>'+bookingHistory.map(function(b){return '<tr><td><code style="font-size:.8rem;">#'+b.id+'</code></td><td>'+b.service+'</td><td>'+b.worker+'</td><td>'+b.date+'</td><td><span class="badge '+(b.status==='Completed'?'badge-success':b.status==='Active'?'badge-info':'badge-danger')+'">'+b.status+'</span></td><td style="font-weight:600;">'+b.amount+'</td><td>'+(b.status==='Active'?'<button class="btn btn-outline btn-sm" onclick="showPage(\'page-tracking\')" style="margin-right:.3rem;">Track</button><button class="btn btn-sm" style="background:var(--danger);color:#fff;" onclick="openModal()">Cancel</button>':'<button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">Rebook</button>')+'</td></tr>';}).join('')+'</tbody></table></div>';
+  } else if(tab==='profile'){
+    main.innerHTML='<div class="dash-welcome"><h2>My Profile</h2><p>Manage your account</p></div><div class="profile-card"><div class="profile-avatar">'+currentUser.charAt(0)+'</div><h3 style="font-size:1.3rem;font-weight:700;">'+currentUser+'</h3><p style="color:var(--gray);font-size:.9rem;">demo@neataura.com</p><p style="color:var(--gray);font-size:.85rem;margin-top:.3rem;">📍 Pollachi, Tamil Nadu</p><button class="btn btn-primary btn-sm" style="margin-top:1rem;">Edit Profile</button></div><div class="bookings-table"><div class="table-header">Account Details</div><table><tr><td style="color:var(--gray);width:40%;">Full Name</td><td style="font-weight:600;">'+currentUser+'</td></tr><tr><td style="color:var(--gray);">Phone</td><td>+91 9876543210</td></tr><tr><td style="color:var(--gray);">Address</td><td>123, Anna Nagar, Pollachi</td></tr><tr><td style="color:var(--gray);">Member Since</td><td>January 2024</td></tr><tr><td style="color:var(--gray);">Total Bookings</td><td style="font-weight:600;color:var(--primary);">7</td></tr></table></div>';
+  } else if(tab==='notifications'){
+    var notifs=[
+      {icon:'✅',bg:'#ECFDF5',msg:'Your Home Cleaning booking is confirmed for tomorrow at 9:00 AM.',time:'2 min ago'},
+      {icon:'🚗',bg:'#EFF6FF',msg:'Ravi Kumar is on the way to your location.',time:'15 min ago'},
+      {icon:'⭐',bg:'#FFFBEB',msg:'Rate your last session with Meena Devi!',time:'2 hrs ago'},
+      {icon:'🔔',bg:'#F3F0FF',msg:'Special offer: 20% off on deep cleaning this weekend!',time:'1 day ago'},
+      {icon:'✓',bg:'#ECFDF5',msg:'Your AC Repair booking has been completed successfully.',time:'3 days ago'}
+    ];
+    main.innerHTML='<div class="dash-welcome"><h2>Notifications</h2><p>Stay updated on your bookings</p></div><div class="notif-list">'+notifs.map(function(n){return '<div class="notif-item"><div class="notif-icon" style="background:'+n.bg+'">'+n.icon+'</div><div><p style="font-size:.88rem;">'+n.msg+'</p><p style="font-size:.75rem;color:var(--gray);margin-top:.2rem;">'+n.time+'</p></div></div>';}).join('')+'</div>';
+  }
+}
+
+function openModal(){document.getElementById('cancelModal').classList.remove('hidden');}
+function closeModal(){document.getElementById('cancelModal').classList.add('hidden');}
+function confirmCancel(){closeModal();showToast('Booking cancelled','');}
+
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=(type==='success'?'✓ ':'')+msg;
+  t.className='toast'+(type==='success'?' success':'');
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+showPage('page-register');
+</script>
+</body>
+</html>
