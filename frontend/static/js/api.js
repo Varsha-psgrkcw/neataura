@@ -7,7 +7,7 @@ const BASE = "http://localhost:5000/api";
 
 function getToken() { return localStorage.getItem("na_token"); }
 function setToken(t) { localStorage.setItem("na_token", t); }
-function clearToken() { localStorage.removeItem("na_token"); localStorage.removeItem("na_user"); }
+function clearToken() { localStorage.removeItem("na_token"); localStorage.removeItem("na_user"); localStorage.removeItem("na_user_email"); }
 
 function authHeaders() {
   return { "Content-Type": "application/json", "Authorization": `Bearer ${getToken()}` };
@@ -49,6 +49,7 @@ async function login(email, password) {
   if (data.token) {
     setToken(data.token);
     localStorage.setItem("na_user", data.username);
+    localStorage.setItem("na_user_email", email); // store real email for profile display
   }
   return data;
 }

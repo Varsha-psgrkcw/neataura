@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeatAura – Home & Technical Services</title>
+<title>NeatAura – Technical Services</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -160,6 +160,8 @@ nav{background:var(--white);padding:0 2rem;height:64px;display:flex;align-items:
 .step-dot.active{background:var(--primary);color:#fff;animation:pulse 1.5s infinite;}
 .step-dot.pending{background:var(--gray-light);color:var(--gray);}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(108,60,225,0.4);}50%{box-shadow:0 0 0 8px rgba(108,60,225,0);}}
+@keyframes sos-pulse{0%,100%{box-shadow:0 4px 16px rgba(239,68,68,0.4);}50%{box-shadow:0 4px 28px rgba(239,68,68,0.8);transform:scale(1.03);}}
+@keyframes bounce-loc{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .step-connector{width:2px;background:var(--gray-border);height:20px;margin:4px 0 0 17px;}
 .step-connector.done{background:var(--success);}
 .step-info h4{font-size:.95rem;font-weight:600;}
@@ -243,7 +245,7 @@ tr:hover td{background:#F9F8FF;}
       <h3>📍 Select Your City</h3>
       <div class="city-search-wrap">
         <span class="city-search-icon">🔍</span>
-        <input type="text" id="city-search-input" placeholder="Search city in Tamil Nadu..." oninput="filterCities()">
+        <input type="text" id="city-search-input" placeholder="Search city in Tamil Nadu...">
       </div>
     </div>
     <div class="city-modal-body" id="city-modal-body"></div>
@@ -262,16 +264,29 @@ tr:hover td{background:#F9F8FF;}
   </div>
 </div>
 
+<!-- SKIP PROFILE WARNING MODAL -->
+<div class="modal-overlay hidden" id="skipWarningModal">
+  <div class="modal-box" style="border-top:4px solid var(--accent);">
+    <div style="font-size:2.5rem;margin-bottom:.8rem;">⚠️</div>
+    <h3 style="color:#92400E;">Profile Details Required</h3>
+    <p>You haven't filled in your details yet. You can look around, but you'll need your full name, phone, address, city &amp; pincode saved before you can book any service.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeSkipWarning()">Go Back & Fill Details</button>
+      <button class="btn btn-sm" style="background:var(--gray-light);color:var(--gray);" onclick="confirmSkipDetails()">Skip for Now</button>
+    </div>
+  </div>
+</div>
+
 <!-- PAGE: REGISTER -->
 <div class="page" id="page-register">
   <div class="auth-card">
-    <div style="text-align:center;margin-bottom:1.5rem;"><div class="logo" style="font-size:2rem;">Neat<span>Aura</span></div><div style="font-size:.8rem;color:var(--gray);margin-top:.3rem;">Smart Home Services</div></div>
+    <div style="text-align:center;margin-bottom:1.5rem;"><div class="logo" style="font-size:2rem;">Neat<span>Aura</span></div><div style="font-size:.8rem;color:var(--gray);margin-top:.3rem;">Smart Technical Services</div></div>
     <h2>Create Account</h2>
     <p class="sub">Join thousands booking trusted workers</p>
-    <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Enter your username" oninput="validateUsername()"><div class="validation-msg" id="username-msg"></div></div>
-    <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" oninput="validateEmail()"><div class="validation-msg" id="email-msg"></div></div>
-    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="reg-password" placeholder="Min. 8 characters" oninput="validatePassword()"><span class="pw-toggle" onclick="togglePw('reg-password',this)">👁</span></div><div class="validation-msg" id="password-msg"></div></div>
-    <div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input type="password" id="reg-confirm" placeholder="Re-enter password" oninput="validateConfirm()"><span class="pw-toggle" onclick="togglePw('reg-confirm',this)">👁</span></div><div class="validation-msg" id="confirm-msg"></div></div>
+    <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Enter your username"><div class="validation-msg" id="username-msg"></div></div>
+    <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com"><div class="validation-msg" id="email-msg"></div></div>
+    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="reg-password" placeholder="Min. 8 characters"><span class="pw-toggle" onclick="togglePw('reg-password',this)">👁</span></div><div class="validation-msg" id="password-msg"></div></div>
+    <div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input type="password" id="reg-confirm" placeholder="Re-enter password"><span class="pw-toggle" onclick="togglePw('reg-confirm',this)">👁</span></div><div class="validation-msg" id="confirm-msg"></div></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doRegister()">Create Account →</button>
     <div class="auth-switch">Already have an account? <a onclick="showPage('page-login')">Sign In</a></div>
   </div>
@@ -296,16 +311,16 @@ tr:hover td{background:#F9F8FF;}
   <div class="welcome-content">
     <div class="welcome-emoji">✨</div>
     <h1>Welcome back,<br><span id="welcome-name">Varsha</span> 👋</h1>
-    <p>Book trusted, verified workers for your daily home and technical needs — fast, easy, and reliable.</p>
+    <p>Book trusted, verified technicians for electrical, plumbing, appliance repair & more — fast, easy, and reliable.</p>
     <div class="floating-cards">
-      <div class="f-card">🏠 Home Services</div>
       <div class="f-card">🛠 Technical Services</div>
+      <div class="f-card">⚡ Electrical & Plumbing</div>
       <div class="f-card">⭐ 4.9 Rated Workers</div>
       <div class="f-card">🔒 Verified & Trusted</div>
     </div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem;" onclick="showPage('page-details')">Get Started →</button>
-      <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="showPage('page-home')">Skip Setup</button>
+      <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="showSkipWarning()">Skip Setup</button>
     </div>
   </div>
 </div>
@@ -313,21 +328,23 @@ tr:hover td{background:#F9F8FF;}
 <!-- PAGE: DETAILS -->
 <div class="page hidden" id="page-details">
   <div style="display:flex;justify-content:center;align-items:center;flex:1;padding:2rem;">
-    <div class="details-card">
-      <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.3rem;">Your Details</h2>
-      <p style="color:var(--gray);font-size:.88rem;margin-bottom:1.8rem;">Help us serve you better (optional)</p>
+    <div class="details-card" style="max-width:560px;">
+      <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.3rem;">Complete Your Profile</h2>
+      <p style="color:var(--gray);font-size:.88rem;margin-bottom:.5rem;">⚠️ Required to make bookings — please fill all fields</p>
+      <div style="background:#FFFBEB;border-left:4px solid var(--accent);border-radius:8px;padding:.8rem 1rem;margin-bottom:1.5rem;font-size:.83rem;color:#92400E;">🔒 Your profile must be complete before you can book any service.</div>
       <div class="form-row">
-        <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 9876543210"></div>
+        <div class="form-group"><label>Full Name <span style="color:var(--danger);">*</span></label><input type="text" id="details-name" placeholder="Your full name"></div>
+        <div class="form-group"><label>Phone Number <span style="color:var(--danger);">*</span></label><input type="tel" id="details-phone" placeholder="+91 9876543210"></div>
       </div>
-      <div class="form-group"><label>Address</label><textarea placeholder="Street address..." rows="2" style="resize:none;"></textarea></div>
+      <div class="form-group"><label>Address <span style="color:var(--danger);">*</span></label><textarea id="details-address" placeholder="Street address..." rows="2" style="resize:none;"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label>City</label><select id="details-city" onchange="applyDetailsCity()"><option value="">Select City</option></select></div>
-        <div class="form-group"><label>Pincode</label><input type="text" placeholder="600001"></div>
+        <div class="form-group"><label>City <span style="color:var(--danger);">*</span></label><select id="details-city"><option value="">Select City</option></select></div>
+        <div class="form-group"><label>Pincode <span style="color:var(--danger);">*</span></label><input type="text" id="details-pincode" placeholder="600001"></div>
       </div>
-      <div style="display:flex;gap:1rem;margin-top:.5rem;">
-        <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="showPage('page-home')">Save & Continue →</button>
-        <button class="skip-btn" onclick="showPage('page-home')">Skip</button>
+      <div id="details-err" style="display:none;color:var(--danger);font-size:.83rem;margin-bottom:.8rem;background:#FEF2F2;padding:.6rem 1rem;border-radius:8px;border-left:3px solid var(--danger);"></div>
+      <div style="display:flex;gap:1rem;margin-top:.5rem;align-items:center;">
+        <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="saveDetailsAndContinue()">Save & Continue →</button>
+        <button class="skip-btn" onclick="showSkipWarning()">Skip for now</button>
       </div>
     </div>
   </div>
@@ -350,25 +367,18 @@ tr:hover td{background:#F9F8FF;}
     </div>
   </nav>
   <div class="home-hero">
-    <h2>What do you need today?</h2>
-    <p id="hero-city-text">Trusted workers for every home need — at your doorstep</p>
+    <h2>What technical service do you need?</h2>
+    <p id="hero-city-text">Expert technicians for every repair & installation — at your doorstep</p>
     <div class="search-wrap">
-      <input type="text" id="search-input" placeholder="Search cleaning, cooking, plumbing..." oninput="showSuggestions()" onblur="hideSuggestions()">
+      <input type="text" id="search-input" placeholder="Search plumbing, electrical, AC repair, carpentry...">
       <button onclick="showToast('Searching...','')">Search</button>
       <div class="search-suggestions hidden" id="search-suggestions"></div>
     </div>
   </div>
-  <div class="services-split">
-    <div class="service-col col-home">
-      <div class="col-title">🏠 Home Services</div>
-      <div class="col-desc">Cleaning, cooking, care & more for your home</div>
-      <div class="cats-grid" id="home-cats"></div>
-    </div>
-    <div class="service-col col-tech">
-      <div class="col-title">🛠 Technical Services</div>
-      <div class="col-desc">Electrical, plumbing, repair & security</div>
-      <div class="cats-grid" id="tech-cats"></div>
-    </div>
+  <div style="padding:2rem;">
+    <div style="font-size:1.4rem;font-weight:700;margin-bottom:.3rem;display:flex;align-items:center;gap:.7rem;color:#1D4ED8;">🛠 Technical Services</div>
+    <div style="color:var(--gray);font-size:.9rem;margin-bottom:1.5rem;">Electrical, plumbing, appliance, carpentry, painting & more — expert technicians at your door</div>
+    <div class="cats-grid" id="tech-cats" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));"></div>
   </div>
 </div>
 
@@ -395,11 +405,11 @@ tr:hover td{background:#F9F8FF;}
     <div class="booking-form-card">
       <div class="section-title">📋 Booking Details</div>
       <div class="form-row">
-        <div class="form-group"><label>Number of Workers</label><select id="b-workers" onchange="updateSuggestion();updateSummary()"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-        <div class="form-group"><label>Number of Days</label><select id="b-days" onchange="updateSummary()"><option>1</option><option>2</option><option>3</option><option>7</option><option>14</option><option>30</option></select></div>
+        <div class="form-group"><label>Number of Workers</label><select id="b-workers" id="b-workers-sel"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        <div class="form-group"><label>Number of Days</label><select id="b-days"><option>1</option><option>2</option><option>3</option><option>7</option><option>14</option><option>30</option></select></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Working Hours / Day</label><select id="b-hours" onchange="updateSuggestion();updateSummary()"><option>2</option><option>4</option><option>6</option><option>8</option></select></div>
+        <div class="form-group"><label>Working Hours / Day</label><select id="b-hours"><option>2</option><option>4</option><option>6</option><option>8</option></select></div>
         <div class="form-group"><label>Preferred Date</label><input type="date" id="b-date"></div>
       </div>
       <div class="form-group"><label>Preferred Time</label><input type="time" id="b-time" value="09:00"></div>
@@ -441,20 +451,32 @@ tr:hover td{background:#F9F8FF;}
 <!-- PAGE: CONFIRM -->
 <div class="page hidden" id="page-confirm">
   <div class="confirm-card">
-    <div class="success-icon">✓</div>
-    <h2>Booking Confirmed! 🎉</h2>
-    <p style="color:var(--gray);margin-bottom:.5rem;">Your worker is on the way</p>
-    <div class="booking-id">Booking ID: #NA-<span id="booking-id-val">00000</span></div>
-    <div class="confirm-details" id="confirm-details"></div>
-    <div style="font-weight:700;font-size:.95rem;margin-bottom:.8rem;">Choose Payment Method</div>
-    <div class="payment-opts">
-      <div class="pay-opt selected" onclick="selectPay(this)">📱 UPI</div>
-      <div class="pay-opt" onclick="selectPay(this)">💳 Card</div>
-      <div class="pay-opt" onclick="selectPay(this)">💵 Cash</div>
+    <!-- PENDING PAYMENT STATE -->
+    <div id="confirm-pending-section">
+      <div style="font-size:3rem;margin-bottom:.5rem;">💳</div>
+      <h2>Review &amp; Pay</h2>
+      <p style="color:var(--gray);margin-bottom:1rem;">Your booking is not confirmed yet — choose a payment method and confirm to lock it in.</p>
+      <div class="confirm-details" id="confirm-details-pending"></div>
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.8rem;">Choose Payment Method <span style="color:var(--danger);">*</span></div>
+      <div class="payment-opts" id="payment-opts-pending">
+        <div class="pay-opt" onclick="selectPay(this)">📱 UPI</div>
+        <div class="pay-opt" onclick="selectPay(this)">💳 Card</div>
+        <div class="pay-opt" onclick="selectPay(this)">💵 Cash</div>
+      </div>
+      <div id="payment-err" style="display:none;color:var(--danger);font-size:.83rem;margin-bottom:1rem;background:#FEF2F2;padding:.6rem 1rem;border-radius:8px;border-left:3px solid var(--danger);">⚠️ Please select a payment method to confirm your booking.</div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="finalizeBooking()">✅ Confirm & Pay</button>
     </div>
-    <div style="display:flex;gap:.8rem;">
-      <button class="btn btn-success" style="flex:1;justify-content:center;" onclick="showPage('page-tracking')">Track Booking →</button>
-      <button class="btn btn-outline btn-sm" onclick="showPage('page-home')">Home</button>
+    <!-- CONFIRMED STATE (only shown after payment is chosen & confirmed) -->
+    <div class="hidden" id="confirm-success-section">
+      <div class="success-icon">✓</div>
+      <h2>Booking Confirmed! 🎉</h2>
+      <p style="color:var(--gray);margin-bottom:.5rem;">Your worker is on the way</p>
+      <div class="booking-id">Booking ID: #NA-<span id="booking-id-val">00000</span></div>
+      <div class="confirm-details" id="confirm-details"></div>
+      <div style="display:flex;gap:.8rem;">
+        <button class="btn btn-success" style="flex:1;justify-content:center;" onclick="showPage('page-tracking')">Track Booking →</button>
+        <button class="btn btn-outline btn-sm" onclick="showPage('page-home')">Home</button>
+      </div>
     </div>
   </div>
 </div>
@@ -462,16 +484,83 @@ tr:hover td{background:#F9F8FF;}
 <!-- PAGE: TRACKING -->
 <div class="page hidden" id="page-tracking">
   <nav><div class="logo">Neat<span>Aura</span></div><div class="nav-links"><a onclick="showPage('page-home')">Home</a><a onclick="showPage('page-dashboard')">Dashboard</a></div></nav>
-  <div style="padding:2rem;max-width:600px;margin:0 auto;">
-    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:.3rem;">Live Booking Status</h2>
-    <p style="color:var(--gray);font-size:.88rem;margin-bottom:1.5rem;">Booking #NA-<span id="track-id">28471</span></p>
-    <div class="tracking-card">
-      <div id="tracking-steps"></div>
-      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-border);display:flex;gap:1rem;">
-        <button class="btn btn-outline btn-sm" onclick="openModal()">Cancel Booking</button>
-        <button class="btn btn-primary btn-sm" onclick="showPage('page-dashboard')">View Dashboard</button>
+  <div style="padding:2rem;max-width:680px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+      <div>
+        <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:.2rem;">Live Booking Status</h2>
+        <p style="color:var(--gray);font-size:.88rem;">Booking #NA-<span id="track-id">28471</span></p>
+      </div>
+      <!-- SOS BUTTON -->
+      <button onclick="triggerSOS()" style="background:linear-gradient(135deg,#DC2626,#EF4444);color:#fff;border:none;border-radius:12px;padding:.8rem 1.5rem;font-family:var(--font);font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 4px 16px rgba(239,68,68,0.4);display:flex;align-items:center;gap:.5rem;animation:sos-pulse 2s infinite;">
+        🆘 SOS Emergency
+      </button>
+    </div>
+
+    <!-- WORKER LOCATION CARD -->
+    <div style="background:#fff;border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1.2rem;">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">📍 Worker Live Location</div>
+      <!-- Map Mockup -->
+      <div style="background:linear-gradient(135deg,#E0F2FE,#DBEAFE);border-radius:12px;height:180px;position:relative;overflow:hidden;margin-bottom:1rem;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;animation:bounce-loc 1.5s ease-in-out infinite;">📍</div>
+            <div style="font-size:.8rem;color:#1D4ED8;font-weight:600;margin-top:.3rem;">Worker is 1.2 km away</div>
+          </div>
+        </div>
+        <!-- Fake road lines -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.2" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="90" x2="100%" y2="90" stroke="#1D4ED8" stroke-width="8"/>
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#1D4ED8" stroke-width="8"/>
+          <line x1="0" y1="45" x2="100%" y2="45" stroke="#1D4ED8" stroke-width="3"/>
+          <line x1="25%" y1="0" x2="25%" y2="100%" stroke="#1D4ED8" stroke-width="3"/>
+          <line x1="75%" y1="0" x2="75%" y2="100%" stroke="#1D4ED8" stroke-width="3"/>
+        </svg>
+        <!-- Worker dot -->
+        <div id="worker-dot" style="position:absolute;width:18px;height:18px;background:#6C3CE1;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);top:55%;left:38%;transition:all 3s ease;"></div>
+        <!-- Home dot -->
+        <div style="position:absolute;width:14px;height:14px;background:#10B981;border-radius:50%;border:3px solid #fff;top:65%;left:60%;"></div>
+        <div style="position:absolute;bottom:.5rem;left:.7rem;font-size:.7rem;color:#1D4ED8;font-weight:600;">🟣 Worker &nbsp;&nbsp; 🟢 Your Location</div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:140px;background:#F3F0FF;border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-size:1.3rem;font-weight:800;color:var(--primary);" id="eta-counter">8</div>
+          <div style="font-size:.75rem;color:var(--gray);">Mins ETA</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:#ECFDF5;border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-size:1.3rem;font-weight:800;color:var(--success);">1.2 km</div>
+          <div style="font-size:.75rem;color:var(--gray);">Distance Away</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:#EFF6FF;border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-size:1.3rem;font-weight:800;color:var(--blue);" id="track-worker-name">Ravi K.</div>
+          <div style="font-size:.75rem;color:var(--gray);">Assigned Worker</div>
+        </div>
       </div>
     </div>
+
+    <div class="tracking-card">
+      <div id="tracking-steps"></div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-border);display:flex;gap:1rem;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="openModal()">Cancel Booking</button>
+        <button class="btn btn-primary btn-sm" onclick="showPage('page-dashboard')">View Dashboard</button>
+        <button class="btn btn-sm" style="background:#FF6B35;color:#fff;" onclick="callWorker()">📞 Call Worker</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOS MODAL -->
+<div class="modal-overlay hidden" id="sosModal">
+  <div class="modal-box" style="border-top:4px solid var(--danger);">
+    <div style="font-size:3rem;margin-bottom:.5rem;">🆘</div>
+    <h3 style="color:var(--danger);">Emergency SOS Alert</h3>
+    <p>Your emergency alert will be sent to our 24/7 support team and local authorities if needed. What kind of help do you need?</p>
+    <div style="display:grid;gap:.6rem;margin-bottom:1.2rem;">
+      <button class="btn btn-sm" style="background:#FEF2F2;color:var(--danger);border:1px solid var(--danger);justify-content:center;" onclick="sendSOS('Safety concern with worker')">⚠️ Safety Concern with Worker</button>
+      <button class="btn btn-sm" style="background:#FEF2F2;color:var(--danger);border:1px solid var(--danger);justify-content:center;" onclick="sendSOS('Worker not responding')">📵 Worker Not Responding</button>
+      <button class="btn btn-sm" style="background:#FEF2F2;color:var(--danger);border:1px solid var(--danger);justify-content:center;" onclick="sendSOS('Medical emergency')">🏥 Medical Emergency</button>
+      <button class="btn btn-sm" style="background:#FEF2F2;color:var(--danger);border:1px solid var(--danger);justify-content:center;" onclick="sendSOS('Other emergency')">🔴 Other Emergency</button>
+    </div>
+    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;" onclick="closeSOS()">Cancel</button>
   </div>
 </div>
 
@@ -490,6 +579,7 @@ tr:hover td{background:#F9F8FF;}
     <div class="dashboard-main" id="dashboard-main"></div>
   </div>
 </div>
+
 
 <script>
 var currentUser='Varsha';
@@ -568,86 +658,144 @@ document.addEventListener('click',function(e){
   if(e.target===modal) closeCityModal();
 });
 
-var homeCategories=[
-  {name:'Cleaning',icon:'🧹',count:'4 services',subs:[
-    {name:'Home Cleaning',desc:'Full home deep clean by experts',price:'₹299',duration:'3-4 hrs',img:'🧹',base:299},
-    {name:'Bathroom Cleaning',desc:'Sanitize & disinfect bathrooms',price:'₹149',duration:'1-2 hrs',img:'🚿',base:149},
-    {name:'Kitchen Cleaning',desc:'Grease removal & full scrub',price:'₹199',duration:'2-3 hrs',img:'🍳',base:199},
-    {name:'Deep Cleaning',desc:'Top-to-bottom intensive clean',price:'₹599',duration:'5-6 hrs',img:'✨',base:599}
-  ]},
-  {name:'Cooking',icon:'👩‍🍳',count:'4 services',subs:[
-    {name:'Veg Cooking',desc:'Fresh vegetarian meal prep daily',price:'₹249',duration:'2-3 hrs',img:'🥗',base:249},
-    {name:'Non-Veg Cooking',desc:'Chicken, fish & meat dishes',price:'₹299',duration:'2-3 hrs',img:'🍗',base:299},
-    {name:'Event Cooking',desc:'Party & event catering',price:'₹999',duration:'6-8 hrs',img:'🎉',base:999},
-    {name:'Daily Meal Prep',desc:'Regular daily tiffin service',price:'₹199',duration:'1-2 hrs',img:'🍱',base:199}
-  ]},
-  {name:'Driving',icon:'🚗',count:'4 services',subs:[
-    {name:'Personal Driver',desc:'Dedicated car driver for you',price:'₹499',duration:'8 hrs',img:'🚗',base:499},
-    {name:'Pickup & Drop',desc:'Airport or station transfers',price:'₹199',duration:'1-2 hrs',img:'✈️',base:199},
-    {name:'Temporary Driver',desc:'Short-term driving needs',price:'₹299',duration:'4 hrs',img:'🔑',base:299},
-    {name:'Night Driver',desc:'Safe late night drives',price:'₹399',duration:'4 hrs',img:'🌙',base:399}
-  ]},
-  {name:'Babysitting',icon:'👶',count:'4 services',subs:[
-    {name:'Infant Care',desc:'Certified infant caregivers',price:'₹349',duration:'8 hrs',img:'🍼',base:349},
-    {name:'Part-time Sitter',desc:'Flexible hourly babysitting',price:'₹199',duration:'4 hrs',img:'👶',base:199},
-    {name:'Full-time Sitter',desc:'Live-in nanny services',price:'₹699',duration:'12 hrs',img:'🤱',base:699},
-    {name:'School Pickup',desc:'Safe school pickup & care',price:'₹249',duration:'3 hrs',img:'🏫',base:249}
-  ]},
-  {name:'Gardening',icon:'🌿',count:'3 services',subs:[
-    {name:'Garden Maintenance',desc:'Pruning, watering & care',price:'₹349',duration:'3-4 hrs',img:'🌿',base:349},
-    {name:'Lawn Mowing',desc:'Neat & even lawn trimming',price:'₹249',duration:'2 hrs',img:'🌱',base:249},
-    {name:'Plant Setup',desc:'New garden planting design',price:'₹599',duration:'5 hrs',img:'🌸',base:599}
-  ]},
-  {name:'Laundry',icon:'👕',count:'2 services',subs:[
-    {name:'Wash & Fold',desc:'Clean laundry done at home',price:'₹199',duration:'2-3 hrs',img:'👕',base:199},
-    {name:'Iron & Press',desc:'Crisp clothes every time',price:'₹149',duration:'1-2 hrs',img:'👔',base:149}
-  ]},
-  {name:'Caretaker',icon:'🤝',count:'2 services',subs:[
-    {name:'Elder Care',desc:'Compassionate senior support',price:'₹599',duration:'12 hrs',img:'🏥',base:599},
-    {name:'Patient Care',desc:'Post-surgery home nursing',price:'₹799',duration:'12 hrs',img:'💊',base:799}
-  ]}
-];
-
 var techCategories=[
-  {name:'Electrical',icon:'⚡',count:'4 services',subs:[
-    {name:'Wiring',desc:'Safe home electrical wiring',price:'₹399',duration:'3-4 hrs',img:'⚡',base:399},
-    {name:'Fan Repair',desc:'Ceiling & table fan fix',price:'₹149',duration:'1 hr',img:'🌀',base:149},
-    {name:'Light Fixing',desc:'LED & bulb installations',price:'₹99',duration:'30 min',img:'💡',base:99},
-    {name:'Switchboard Repair',desc:'Safe switch & socket fix',price:'₹199',duration:'1-2 hrs',img:'🔌',base:199}
+  {name:'Electrical',icon:'⚡',count:'6 services',subs:[
+    {name:'Home Wiring',desc:'Safe full home electrical wiring & rewiring',price:'₹1,500',duration:'4-6 hrs',img:'⚡',base:1500},
+    {name:'Fan Installation',desc:'Ceiling fan fitting & replacement',price:'₹350',duration:'1 hr',img:'🌀',base:350},
+    {name:'Light Fixing',desc:'LED, tubelight & bulb installation',price:'₹200',duration:'30 min',img:'💡',base:200},
+    {name:'Switchboard Repair',desc:'Safe switch, socket & MCB fixing',price:'₹400',duration:'1-2 hrs',img:'🔌',base:400},
+    {name:'Inverter/UPS Service',desc:'Inverter setup, battery & UPS repair',price:'₹800',duration:'2-3 hrs',img:'🔋',base:800},
+    {name:'Short Circuit Fix',desc:'Emergency short circuit detection & fix',price:'₹1,200',duration:'2-4 hrs',img:'🛡',base:1200}
   ]},
-  {name:'Plumbing',icon:'🔧',count:'4 services',subs:[
-    {name:'Leakage Repair',desc:'Stop pipe leaks fast',price:'₹249',duration:'2-3 hrs',img:'🔧',base:249},
-    {name:'Pipe Fixing',desc:'New pipe lay & repairs',price:'₹349',duration:'3-4 hrs',img:'🪛',base:349},
-    {name:'Tap Repair',desc:'Dripping tap fix & replace',price:'₹149',duration:'1 hr',img:'🚿',base:149},
-    {name:'Drain Cleaning',desc:'Blocked drain clearing',price:'₹199',duration:'1-2 hrs',img:'🏊',base:199}
+  {name:'Plumbing',icon:'🔧',count:'6 services',subs:[
+    {name:'Pipe Leakage Repair',desc:'Stop pipe leaks fast, walls or under sink',price:'₹600',duration:'2-3 hrs',img:'🔧',base:600},
+    {name:'New Pipe Laying',desc:'New pipeline installation & routing',price:'₹1,800',duration:'4-6 hrs',img:'🪛',base:1800},
+    {name:'Tap & Faucet Repair',desc:'Dripping tap fix, replacement & fitting',price:'₹350',duration:'1 hr',img:'🚿',base:350},
+    {name:'Drain Cleaning',desc:'Blocked drain, sink & toilet clearing',price:'₹500',duration:'1-2 hrs',img:'🏊',base:500},
+    {name:'Water Tank Cleaning',desc:'Overhead & sump tank sanitization',price:'₹1,500',duration:'3-4 hrs',img:'💧',base:1500},
+    {name:'Bathroom Fitting',desc:'Toilet, shower & bathroom fixture install',price:'₹2,500',duration:'5-6 hrs',img:'🚽',base:2500}
   ]},
-  {name:'Appliance',icon:'🔨',count:'4 services',subs:[
-    {name:'AC Repair',desc:'AC service & gas refill',price:'₹499',duration:'2-3 hrs',img:'❄️',base:499},
-    {name:'Fridge Repair',desc:'Cooling & compressor fix',price:'₹399',duration:'2-3 hrs',img:'🧊',base:399},
-    {name:'Washing Machine',desc:'All brand WM repairs',price:'₹349',duration:'2 hrs',img:'🫧',base:349},
-    {name:'TV Repair',desc:'Smart TV & LED repairs',price:'₹299',duration:'1-2 hrs',img:'📺',base:299}
+  {name:'AC & HVAC',icon:'❄️',count:'5 services',subs:[
+    {name:'AC Service & Clean',desc:'Deep cleaning, filter wash & coil clean',price:'₹800',duration:'2-3 hrs',img:'❄️',base:800},
+    {name:'AC Gas Refill',desc:'Refrigerant gas top-up & pressure check',price:'₹1,500',duration:'2 hrs',img:'🧊',base:1500},
+    {name:'AC Installation',desc:'Split AC wall fitting & piping',price:'₹2,000',duration:'3-4 hrs',img:'🌬',base:2000},
+    {name:'AC Repair',desc:'Compressor, PCB & thermostat repair',price:'₹1,200',duration:'2-4 hrs',img:'🔨',base:1200},
+    {name:'AC Uninstallation',desc:'Safe AC removal for shifting or service',price:'₹700',duration:'1-2 hrs',img:'📦',base:700}
   ]},
-  {name:'Security',icon:'🔐',count:'2 services',subs:[
-    {name:'Watchman',desc:'24/7 property security',price:'₹699',duration:'12 hrs',img:'👮',base:699},
-    {name:'Security Support',desc:'Event & premises security',price:'₹499',duration:'8 hrs',img:'🔐',base:499}
+  {name:'Appliance Repair',icon:'🔨',count:'6 services',subs:[
+    {name:'Refrigerator Repair',desc:'Cooling failure, compressor & gas fix',price:'₹1,000',duration:'2-3 hrs',img:'🧊',base:1000},
+    {name:'Washing Machine',desc:'All brand WM drum, motor & pump repair',price:'₹900',duration:'2-3 hrs',img:'🫧',base:900},
+    {name:'Microwave Repair',desc:'Heating, magnetron & panel repair',price:'₹700',duration:'1-2 hrs',img:'📡',base:700},
+    {name:'TV / LED Repair',desc:'Smart TV, LED panel & remote issues',price:'₹800',duration:'2-3 hrs',img:'📺',base:800},
+    {name:'Water Heater / Geyser',desc:'Geyser element, thermostat repair',price:'₹600',duration:'1-2 hrs',img:'🔥',base:600},
+    {name:'Mixer / Grinder',desc:'Motor, jar & blade repair for all brands',price:'₹350',duration:'1 hr',img:'⚙️',base:350}
+  ]},
+  {name:'Carpentry',icon:'🪚',count:'5 services',subs:[
+    {name:'Door Repair & Fitting',desc:'Wooden door fix, hinge & lock repair',price:'₹800',duration:'2-3 hrs',img:'🚪',base:800},
+    {name:'Furniture Assembly',desc:'Wardrobe, bed & furniture assembly',price:'₹1,200',duration:'3-4 hrs',img:'🪑',base:1200},
+    {name:'False Ceiling',desc:'POP / gypsum false ceiling installation',price:'₹3,500',duration:'1 day',img:'🏠',base:3500},
+    {name:'Wooden Flooring',desc:'Laminate & hardwood floor fitting',price:'₹4,000',duration:'1 day',img:'🪵',base:4000},
+    {name:'Window Repair',desc:'Window frame, glass & grill repair',price:'₹700',duration:'2 hrs',img:'🪟',base:700}
+  ]},
+  {name:'Painting',icon:'🎨',count:'4 services',subs:[
+    {name:'Interior Painting',desc:'Full room wall & ceiling paint job',price:'₹3,000',duration:'1-2 days',img:'🎨',base:3000},
+    {name:'Exterior Painting',desc:'Outer wall waterproof painting',price:'₹5,000',duration:'2-3 days',img:'🏗',base:5000},
+    {name:'Wood Polish',desc:'Door & furniture polishing & varnish',price:'₹1,500',duration:'4-6 hrs',img:'✨',base:1500},
+    {name:'Waterproofing',desc:'Roof & wall damp & leak waterproofing',price:'₹4,000',duration:'1-2 days',img:'💧',base:4000}
+  ]},
+  {name:'CCTV & Security',icon:'📹',count:'4 services',subs:[
+    {name:'CCTV Installation',desc:'HD camera setup, DVR & night vision',price:'₹3,500',duration:'4-6 hrs',img:'📹',base:3500},
+    {name:'CCTV Repair',desc:'Camera, DVR & cable fault fixing',price:'₹800',duration:'2-3 hrs',img:'🔐',base:800},
+    {name:'Video Door Bell',desc:'Smart video doorbell installation',price:'₹1,000',duration:'1-2 hrs',img:'🔔',base:1000},
+    {name:'Security Guard',desc:'Trained licensed security personnel (12 hr)',price:'₹1,800',duration:'12 hrs',img:'👮',base:1800}
+  ]},
+  {name:'Network & IT',icon:'🌐',count:'4 services',subs:[
+    {name:'WiFi Setup',desc:'Router config, range extender & mesh setup',price:'₹500',duration:'1-2 hrs',img:'📶',base:500},
+    {name:'Computer Repair',desc:'PC, laptop hardware & OS troubleshoot',price:'₹800',duration:'2-3 hrs',img:'💻',base:800},
+    {name:'CCTV Networking',desc:'IP camera & NVR network configuration',price:'₹1,200',duration:'2-4 hrs',img:'🌐',base:1200},
+    {name:'Data Recovery',desc:'Hard disk & pen drive data recovery',price:'₹1,500',duration:'2-4 hrs',img:'💾',base:1500}
+  ]},
+  {name:'Gas & Pipeline',icon:'🔥',count:'3 services',subs:[
+    {name:'Gas Stove Repair',desc:'Burner, regulator & valve repair',price:'₹400',duration:'1 hr',img:'🔥',base:400},
+    {name:'LPG Pipeline',desc:'Home gas pipeline fitting & testing',price:'₹2,000',duration:'3-5 hrs',img:'🏭',base:2000},
+    {name:'Gas Leak Check',desc:'Full home gas leak detection & fixing',price:'₹600',duration:'1-2 hrs',img:'⚠️',base:600}
+  ]},
+  {name:'Masonry',icon:'🧱',count:'3 services',subs:[
+    {name:'Wall Crack Repair',desc:'Interior & exterior wall crack filling',price:'₹1,200',duration:'3-4 hrs',img:'🧱',base:1200},
+    {name:'Tile Fixing',desc:'Bathroom, kitchen & floor tile repair',price:'₹1,500',duration:'4-6 hrs',img:'🪟',base:1500},
+    {name:'Plastering',desc:'Wall replastering & finishing work',price:'₹3,000',duration:'1-2 days',img:'🏗',base:3000}
+  ]},
+  {name:'Pest Control',icon:'🐜',count:'4 services',subs:[
+    {name:'General Pest Control',desc:'Cockroach, ant & general pest spraying',price:'₹900',duration:'1-2 hrs',img:'🐜',base:900},
+    {name:'Termite Treatment',desc:'Anti-termite chemical & wood treatment',price:'₹2,200',duration:'3-4 hrs',img:'🪵',base:2200},
+    {name:'Bed Bug Treatment',desc:'Mattress & furniture bed bug fumigation',price:'₹1,400',duration:'2-3 hrs',img:'🛏',base:1400},
+    {name:'Rodent Control',desc:'Rat & rodent trapping and prevention',price:'₹1,000',duration:'1-2 hrs',img:'🐀',base:1000}
+  ]},
+  {name:'Home Automation',icon:'🤖',count:'4 services',subs:[
+    {name:'Smart Lighting Setup',desc:'Smart bulb, switch & app automation setup',price:'₹1,200',duration:'2-3 hrs',img:'💡',base:1200},
+    {name:'Smart Lock Installation',desc:'Digital door lock fitting & app pairing',price:'₹1,800',duration:'2 hrs',img:'🔐',base:1800},
+    {name:'Home Theater Setup',desc:'Speaker, soundbar & TV wiring setup',price:'₹1,500',duration:'2-4 hrs',img:'🎬',base:1500},
+    {name:'Smart Switch Installation',desc:'WiFi switchboard upgrade & configuration',price:'₹900',duration:'1-2 hrs',img:'🎛',base:900}
+  ]},
+  {name:'Solar & Renewable',icon:'☀️',count:'3 services',subs:[
+    {name:'Solar Panel Installation',desc:'Rooftop solar panel fitting & wiring',price:'₹8,000',duration:'1-2 days',img:'☀️',base:8000},
+    {name:'Solar Water Heater Repair',desc:'Solar geyser element & pipe repair',price:'₹1,000',duration:'2-3 hrs',img:'🔆',base:1000},
+    {name:'Solar Panel Cleaning',desc:'Panel cleaning & efficiency check',price:'₹600',duration:'1-2 hrs',img:'🧽',base:600}
+  ]},
+  {name:'Locksmith',icon:'🔑',count:'4 services',subs:[
+    {name:'Lockout Emergency Service',desc:'Locked out? Fast door unlock assistance',price:'₹500',duration:'30-60 min',img:'🚪',base:500},
+    {name:'Door Lock Repair',desc:'Worn or jammed lock repair & servicing',price:'₹450',duration:'1 hr',img:'🔧',base:450},
+    {name:'Key Duplication',desc:'On-site spare key cutting & duplication',price:'₹250',duration:'30 min',img:'🗝',base:250},
+    {name:'Safe / Locker Installation',desc:'Home safe & locker fitting & anchoring',price:'₹1,300',duration:'1-2 hrs',img:'🔒',base:1300}
   ]}
 ];
 
 var workers=[
-  {name:'Ravi Kumar',exp:'5 yrs',rating:'4.9',score:'98%',lang:['Tamil','English'],color:'#6C3CE1',init:'RK'},
-  {name:'Meena Devi',exp:'3 yrs',rating:'4.8',score:'96%',lang:['Tamil','Hindi'],color:'#E85D9A',init:'MD'},
-  {name:'Arjun Raj',exp:'7 yrs',rating:'5.0',score:'99%',lang:['English','Tamil'],color:'#2563EB',init:'AR'},
-  {name:'Priya S.',exp:'4 yrs',rating:'4.7',score:'94%',lang:['Tamil'],color:'#10B981',init:'PS'},
-  {name:'Suresh V.',exp:'6 yrs',rating:'4.9',score:'97%',lang:['Tamil','Telugu'],color:'#F59E0B',init:'SV'},
-  {name:'Lakshmi N.',exp:'2 yrs',rating:'4.6',score:'92%',lang:['Tamil'],color:'#EF4444',init:'LN'}
+  {name:'Ravi Kumar',gender:'Male',exp:'5 yrs',rating:'4.9',score:'98%',lang:['Tamil','English'],color:'#6C3CE1',init:'RK',skills:['Electrical','AC Repair'],aadhar:'XXXX-XXXX-4521',ration:'TN-CB-0023412',bgCheck:true,phone:'98765-XXXXX'},
+  {name:'Meena Devi',gender:'Female',exp:'3 yrs',rating:'4.8',score:'96%',lang:['Tamil','Hindi'],color:'#E85D9A',init:'MD',skills:['Painting','Masonry'],aadhar:'XXXX-XXXX-7834',ration:'TN-MD-0054321',bgCheck:true,phone:'87654-XXXXX'},
+  {name:'Arjun Raj',gender:'Male',exp:'7 yrs',rating:'5.0',score:'99%',lang:['English','Tamil'],color:'#2563EB',init:'AR',skills:['Plumbing','Gas & Pipeline'],aadhar:'XXXX-XXXX-3390',ration:'TN-CH-0091234',bgCheck:true,phone:'76543-XXXXX'},
+  {name:'Priya S.',gender:'Female',exp:'4 yrs',rating:'4.7',score:'94%',lang:['Tamil'],color:'#10B981',init:'PS',skills:['Network & IT','CCTV'],aadhar:'XXXX-XXXX-6612',ration:'TN-SA-0067890',bgCheck:true,phone:'65432-XXXXX'},
+  {name:'Suresh V.',gender:'Male',exp:'6 yrs',rating:'4.9',score:'97%',lang:['Tamil','Telugu'],color:'#F59E0B',init:'SV',skills:['Carpentry','Appliance Repair'],aadhar:'XXXX-XXXX-9901',ration:'TN-ER-0043217',bgCheck:true,phone:'54321-XXXXX'},
+  {name:'Lakshmi N.',gender:'Female',exp:'2 yrs',rating:'4.6',score:'92%',lang:['Tamil'],color:'#EF4444',init:'LN',skills:['Electrical','Plumbing'],aadhar:'XXXX-XXXX-1123',ration:'TN-TV-0087654',bgCheck:false,phone:'43219-XXXXX'}
 ];
 
-var bookingHistory=[
-  {id:'NA-28471',service:'Home Cleaning',worker:'Ravi Kumar',date:'2024-01-15',status:'Completed',amount:'₹299'},
-  {id:'NA-28310',service:'AC Repair',worker:'Arjun Raj',date:'2024-01-10',status:'Completed',amount:'₹499'},
-  {id:'NA-28102',service:'Cooking',worker:'Meena Devi',date:'2024-01-05',status:'Active',amount:'₹249'},
-  {id:'NA-27890',service:'Plumbing',worker:'Suresh V.',date:'2023-12-28',status:'Cancelled',amount:'₹249'}
-];
+// ─── BACKEND: localStorage-powered booking storage ───────────────────────────
+var STORAGE_KEY = 'neataura_bookings_v1';
+
+function loadBookings() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function saveBookings(list) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e) {}
+}
+
+function addBooking(booking) {
+  var list = loadBookings();
+  list.unshift(booking); // newest first
+  saveBookings(list);
+}
+
+function cancelBookingById(id) {
+  var list = loadBookings();
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].id === id && list[i].status === 'Active') {
+      list[i].status = 'Cancelled';
+      break;
+    }
+  }
+  saveBookings(list);
+}
+
+function getBookingHistory() {
+  return loadBookings();
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+var bookingHistory = getBookingHistory(); // live reference (refreshed on showDash)
 
 function getAllCities(){
   var all=[];
@@ -715,33 +863,155 @@ function validateConfirm(){
   if(p!==c){msg.className='validation-msg error';msg.textContent='Passwords do not match';}
   else if(c){msg.className='validation-msg success';msg.textContent='✓ Passwords match';}
 }
+// ─── API CLIENT (inlined from api.js) ────────────────────────────────────────
+var BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? "http://localhost:5000/api"
+  : "/api";
+function getToken(){ return localStorage.getItem("na_token"); }
+function setToken(t){ localStorage.setItem("na_token", t); }
+function clearToken(){ localStorage.removeItem("na_token"); localStorage.removeItem("na_user"); localStorage.removeItem("na_user_email"); }
+function authHeaders(){ return {"Content-Type":"application/json","Authorization":"Bearer "+getToken()}; }
+
+function apiPost(path, body, auth){
+  return fetch(BASE+path,{
+    method:"POST",
+    headers: auth ? authHeaders() : {"Content-Type":"application/json"},
+    body: JSON.stringify(body)
+  }).then(function(r){return r.json();});
+}
+function apiGet(path, params){
+  params = params||{};
+  var qs = Object.keys(params).filter(function(k){return params[k]!=null;}).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
+  return fetch(BASE+path+(qs?"?"+qs:""),{headers:authHeaders()}).then(function(r){return r.json();});
+}
+function apiPut(path, body){
+  return fetch(BASE+path,{method:"PUT",headers:authHeaders(),body:JSON.stringify(body||{})}).then(function(r){return r.json();});
+}
+
+function register(username, email, password){ return apiPost("/register",{username:username,email:email,password:password}); }
+function login(email, password){
+  return apiPost("/login",{email:email,password:password}).then(function(data){
+    if(data.token){
+      setToken(data.token);
+      localStorage.setItem("na_user", data.username);
+      localStorage.setItem("na_user_email", email);
+    }
+    return data;
+  });
+}
+function logout(){ clearToken(); showPage("page-login"); }
+function fetchServices(){ return apiGet("/services"); }
+function fetchWorkers(serviceId, city){ return apiGet("/workers",{service_id:serviceId,city:city}); }
+function createBooking(payload){ return apiPost("/bookings",payload,true); }
+function fetchBookings(){ return apiGet("/bookings"); }
+function cancelBooking(id){ return apiPut("/bookings/"+id+"/cancel"); }
+function fetchProfile(){ return apiGet("/profile"); }
+function updateProfile(data){ return apiPut("/profile",data); }
+// ─────────────────────────────────────────────────────────────────────────────
+
 function doRegister(){
-  var u=document.getElementById('reg-username').value;
-  if(!u){showToast('Please fill all fields','');return;}
-  currentUser=u||'User';
-  document.getElementById('welcome-name').textContent=currentUser;
-  showPage('page-welcome');
-  showToast('Account created!','success');
+  var u  = (document.getElementById('reg-username')||{}).value||'';
+  var em = (document.getElementById('reg-email')||{}).value||'';
+  var pw = (document.getElementById('reg-password')||{}).value||'';
+  var cf = (document.getElementById('reg-confirm')||{}).value||'';
+  if(!u||!em||!pw){showToast('Please fill all fields','');return;}
+  if(pw.length<8){showToast('Password must be at least 8 characters','');return;}
+  if(pw!==cf){showToast('Passwords do not match','');return;}
+
+  function registerSuccess(){
+    currentUser = u;
+    document.getElementById('welcome-name').textContent = currentUser;
+    // Save locally so login works without backend too
+    try{
+      var accounts = JSON.parse(localStorage.getItem('na_accounts')||'{}');
+      accounts[em.toLowerCase()] = {username:u, password:pw};
+      localStorage.setItem('na_accounts', JSON.stringify(accounts));
+      localStorage.setItem('na_user_email', em);
+      var raw=localStorage.getItem(PROFILE_KEY);
+      var existing=raw?JSON.parse(raw):{};
+      existing.email = em;
+      existing.name  = existing.name || u;
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(existing));
+    }catch(e){}
+    showPage('page-welcome');
+    showToast('Account created!','success');
+  }
+
+  // Try backend, fall back to local-only
+  register(u, em, pw).then(function(data){
+    if(data && (data.message || data.token)){ registerSuccess(); }
+    else if(data && data.error){ showToast('❌ '+data.error,''); }
+    else { registerSuccess(); }
+  }).catch(function(){ registerSuccess(); }); // offline — still works locally
 }
 function doLogin(){
-  currentUser='Varsha';
-  document.getElementById('welcome-name').textContent=currentUser;
-  showPage('page-welcome');
-  showToast('Welcome back!','success');
+  var email=document.getElementById('login-email')?document.getElementById('login-email').value.trim():'';
+  var pw=document.getElementById('login-password')?document.getElementById('login-password').value:'';
+  if(!email||!pw){showToast('Please enter email and password','');return;}
+
+  function loginSuccess(username, emailAddr){
+    currentUser = username || emailAddr.split('@')[0] || 'User';
+    document.getElementById('welcome-name').textContent = currentUser;
+    // Store email in local profile
+    try{
+      var raw=localStorage.getItem(PROFILE_KEY);
+      var existing=raw?JSON.parse(raw):{};
+      existing.email = emailAddr;
+      existing.name  = existing.name || currentUser;
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(existing));
+      localStorage.setItem('na_user_email', emailAddr);
+    }catch(e){}
+    showPage('page-welcome');
+    showToast('Welcome back, '+currentUser+'!','success');
+  }
+
+  // ── Try backend first, fall back to localStorage account ──
+  login(email, pw).then(function(data){
+    if(data && data.token){
+      // ✅ Backend login succeeded
+      loginSuccess(data.username, email);
+      // Also sync profile from server in background
+      fetchProfile().then(function(prof){
+        if(prof && prof.email){
+          try{
+            var raw=localStorage.getItem(PROFILE_KEY);
+            var existing=raw?JSON.parse(raw):{};
+            existing.email=prof.email;
+            if(prof.city)  existing.city  = existing.city  || prof.city;
+            if(prof.phone) existing.phone = existing.phone || prof.phone;
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(existing));
+          }catch(e){}
+        }
+      }).catch(function(){});
+    } else {
+      // Backend returned an error — try localStorage fallback
+      localLogin(email, pw, loginSuccess);
+    }
+  }).catch(function(){
+    // Network error (no backend) — use localStorage accounts
+    localLogin(email, pw, loginSuccess);
+  });
+}
+
+function localLogin(email, pw, onSuccess){
+  // Check accounts stored by doRegister in localStorage
+  try{
+    var accounts = JSON.parse(localStorage.getItem('na_accounts')||'{}');
+    var acc = accounts[email.toLowerCase()];
+    if(!acc){ showToast('❌ No account found for this email',''); return; }
+    if(acc.password !== pw){ showToast('❌ Incorrect password',''); return; }
+    onSuccess(acc.username, email);
+  }catch(e){ showToast('❌ Login error. Please try again.',''); }
 }
 
 function renderHomeCategories(){
-  var hc=document.getElementById('home-cats');
   var tc=document.getElementById('tech-cats');
-  hc.innerHTML=homeCategories.map(function(c){
-    return '<div class="cat-card" onclick="openCategory(\'home\',\''+c.name+'\')"><div class="cat-icon">'+c.icon+'</div><div class="cat-name">'+c.name+'</div><div class="cat-count">'+c.count+'</div></div>';
-  }).join('');
   tc.innerHTML=techCategories.map(function(c){
     return '<div class="cat-card" onclick="openCategory(\'tech\',\''+c.name+'\')"><div class="cat-icon">'+c.icon+'</div><div class="cat-name">'+c.name+'</div><div class="cat-count">'+c.count+'</div></div>';
   }).join('');
 }
 
-var searchTerms=['Cleaning','Cooking','Driving','Babysitting','Gardening','Laundry','Caretaker','Electrical','Plumbing','AC Repair','Fan Repair','Watchman','Deep Cleaning','Home Cleaning','Kitchen Cleaning'];
+var searchTerms=['Electrical','Plumbing','AC Service','AC Gas Refill','Fan Installation','Light Fixing','Switchboard Repair','Pipe Leakage','Drain Cleaning','Water Tank Cleaning','Refrigerator Repair','Washing Machine','TV Repair','Carpentry','Painting','CCTV Installation','WiFi Setup','Computer Repair','Gas Stove Repair','Wall Crack Repair','Tile Fixing','Water Heater','Inverter Service','Door Repair','Furniture Assembly'];
 function showSuggestions(){
   var q=document.getElementById('search-input').value.toLowerCase();
   if(!q){hideSuggestions();return;}
@@ -755,23 +1025,36 @@ function hideSuggestions(){setTimeout(function(){document.getElementById('search
 function selectSearch(t){document.getElementById('search-input').value=t;hideSuggestions();}
 
 function openCategory(type,name){
-  var cats=type==='home'?homeCategories:techCategories;
+  var cats=techCategories;
   var cat=null;
   for(var i=0;i<cats.length;i++){if(cats[i].name===name){cat=cats[i];break;}}
   if(!cat)return;
-  var isHome=type==='home';
   var hdr=document.getElementById('subcat-header');
-  hdr.style.background=isHome?'linear-gradient(135deg,#C2410C,#EA580C)':'linear-gradient(135deg,#1D4ED8,#2563EB)';
+  hdr.style.background='linear-gradient(135deg,#1D4ED8,#2563EB)';
   document.getElementById('subcat-title').textContent=cat.icon+' '+cat.name;
   document.getElementById('subcat-desc').textContent='Choose the service you need';
   var grid=document.getElementById('subcat-cards');
   grid.innerHTML=cat.subs.map(function(s){
-    return '<div class="service-card" onclick="openBooking(\''+s.name+'\','+s.base+')"><div class="service-card-img" style="background:'+(isHome?'#FFF7ED':'#EFF6FF')+'">'+s.img+'</div><div class="service-card-body"><h4>'+s.name+'</h4><p>'+s.desc+'</p><div class="price-row"><span class="price">Starting '+s.price+'</span><span class="duration">⏱ '+s.duration+'</span></div><button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:.8rem;">Book Now</button></div></div>';
+    return '<div class="service-card" onclick="openBooking(\''+s.name+'\','+s.base+')"><div class="service-card-img" style="background:#EFF6FF">'+s.img+'</div><div class="service-card-body"><h4>'+s.name+'</h4><p>'+s.desc+'</p><div class="price-row"><span class="price">Starting '+s.price+'</span><span class="duration">⏱ '+s.duration+'</span></div><button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:.8rem;">Book Now</button></div></div>';
   }).join('');
   showPage('page-subcategory');
 }
 
+function isProfileComplete(){
+  try{
+    var raw=localStorage.getItem(PROFILE_KEY);
+    if(!raw) return false;
+    var p=JSON.parse(raw);
+    return !!(p.name && p.phone && p.address && p.city && p.pincode);
+  }catch(e){return false;}
+}
+
 function openBooking(name,price){
+  if(!isProfileComplete()){
+    showToast('⚠️ Please complete your profile first!','');
+    setTimeout(function(){showPage('page-details');populateCitySelects();},900);
+    return;
+  }
   selectedService=name;
   basePrice=price;
   document.getElementById('booking-service-name').textContent='Book: '+name;
@@ -800,24 +1083,73 @@ function updateSuggestion(){
   }
   box.innerHTML=html;
 }
-function updateSummary(){
+function hashString(s){
+  var h=0;
+  for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}
+  return h;
+}
+function getDistanceKm(city){
+  if(!city) return 3.0;
+  var h=hashString(city);
+  var km=1.5+(h%131)/10; // deterministic 1.5 – 14.6 km per city
+  return Math.round(km*10)/10;
+}
+function getTravelFee(km){
+  if(!km) return 0;
+  var base=40; // flat charge covers first 3 km
+  if(km<=3) return base;
+  return Math.round(base+(km-3)*15);
+}
+function computeBookingTotals(){
   var w=parseInt(document.getElementById('b-workers').value)||1;
   var d=parseInt(document.getElementById('b-days').value)||1;
   var h=parseInt(document.getElementById('b-hours').value)||4;
-  var total=basePrice*w*d;
-  var rows=document.getElementById('summary-rows');
   var cityEl=document.getElementById('b-city');
-  var cityVal=cityEl?cityEl.value:selectedCity;
-  rows.innerHTML='<div class="summary-row"><span>Service</span><span style="font-weight:600;">'+(selectedService||'Service')+'</span></div><div class="summary-row"><span>City</span><span style="font-weight:600;">'+(cityVal||selectedCity||'—')+'</span></div><div class="summary-row"><span>Workers</span><span>'+w+'</span></div><div class="summary-row"><span>Days</span><span>'+d+'</span></div><div class="summary-row"><span>Hours/day</span><span>'+h+'</span></div><div class="summary-row"><span>Base Price</span><span>₹'+basePrice+'/worker/day</span></div><div class="summary-row"><span>Gender Pref</span><span>'+selectedGender+'</span></div>';
-  document.getElementById('summary-total').textContent='₹'+total.toLocaleString('en-IN');
+  var cityVal=(cityEl?cityEl.value:'')||selectedCity||'';
+  var distanceKm=getDistanceKm(cityVal);
+  var travelFee=getTravelFee(distanceKm);
+  var serviceTotal=basePrice*w*d;
+  var grandTotal=serviceTotal+travelFee;
+  return {w:w,d:d,h:h,city:cityVal||'—',distanceKm:distanceKm,travelFee:travelFee,serviceTotal:serviceTotal,grandTotal:grandTotal};
+}
+function updateSummary(){
+  var t=computeBookingTotals();
+  var rows=document.getElementById('summary-rows');
+  rows.innerHTML='<div class="summary-row"><span>Service</span><span style="font-weight:600;">'+(selectedService||'Service')+'</span></div>'
+    +'<div class="summary-row"><span>City</span><span style="font-weight:600;">'+t.city+'</span></div>'
+    +'<div class="summary-row"><span>Workers</span><span>'+t.w+'</span></div>'
+    +'<div class="summary-row"><span>Days</span><span>'+t.d+'</span></div>'
+    +'<div class="summary-row"><span>Hours/day</span><span>'+t.h+'</span></div>'
+    +'<div class="summary-row"><span>Base Price</span><span>₹'+basePrice+'/worker/day</span></div>'
+    +'<div class="summary-row"><span>Gender Pref</span><span>'+selectedGender+'</span></div>'
+    +'<div class="summary-row"><span>📍 Distance to you</span><span>'+t.distanceKm+' km</span></div>'
+    +'<div class="summary-row"><span>🚗 Travel Charge</span><span>₹'+t.travelFee+'</span></div>';
+  document.getElementById('summary-total').textContent='₹'+t.grandTotal.toLocaleString('en-IN');
 }
 
 function renderWorkers(){
   var grid=document.getElementById('workers-grid');
-  grid.innerHTML=workers.map(function(w,i){
+  // Filter by selected gender preference
+  var filtered=workers.filter(function(w){
+    if(selectedGender==='Any') return true;
+    return w.gender===selectedGender;
+  });
+  if(filtered.length===0){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray);"><div style="font-size:3rem;margin-bottom:1rem;">😔</div><p style="font-size:1rem;font-weight:600;">No '+selectedGender+' workers available right now.</p><p style="font-size:.88rem;margin-top:.4rem;">Try selecting "Any" gender preference.</p></div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(function(w,i){
+    var realIndex=workers.indexOf(w);
     var stars='★'.repeat(Math.round(parseFloat(w.rating)))+'☆'.repeat(5-Math.round(parseFloat(w.rating)));
     var langs=w.lang.map(function(l){return '<span class="lang-badge">'+l+'</span>';}).join('');
-    return '<div class="worker-card" id="wcard-'+i+'" onclick="selectWorkerCard('+i+')"><div class="worker-avatar" style="background:'+w.color+'">'+w.init+'</div><div class="worker-name">'+w.name+'</div><div class="worker-exp">⏱ '+w.exp+' experience</div><div class="stars">'+stars+' '+w.rating+'</div><div class="trust-badge">🛡 Trust Score: '+w.score+'</div><div style="margin:.4rem 0;">'+langs+'</div><div class="worker-actions"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();showToast(\''+w.name+' profile\',\'\')">Profile</button><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();selectWorkerCard('+i+')">Select</button></div></div>';
+    var genderBadge='<span style="font-size:.72rem;padding:.2rem .6rem;border-radius:6px;background:'+(w.gender==='Female'?'#FDF2F8':'#EFF6FF')+';color:'+(w.gender==='Female'?'#9D174D':'#1E40AF')+';">'+(w.gender==='Female'?'👩 Female':'👨 Male')+'</span>';
+    var skillBadges=(w.skills||[]).map(function(s){return '<span style="font-size:.7rem;padding:.15rem .5rem;border-radius:4px;background:#EFF6FF;color:#1D4ED8;margin:.1rem;display:inline-block;">'+s+'</span>';}).join('');
+    var docBadges='<div style="margin:.4rem 0;display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center;">'
+      +'<span style="font-size:.68rem;padding:.2rem .5rem;border-radius:6px;background:#ECFDF5;color:#065F46;">🪪 Aadhar: '+(w.aadhar||'N/A')+'</span>'
+      +'<span style="font-size:.68rem;padding:.2rem .5rem;border-radius:6px;background:#EFF6FF;color:#1E40AF;">📄 Ration: '+(w.ration||'N/A')+'</span>'
+      +(w.bgCheck?'<span style="font-size:.68rem;padding:.2rem .5rem;border-radius:6px;background:#F3F0FF;color:#6C3CE1;">✅ BG Verified</span>':'<span style="font-size:.68rem;padding:.2rem .5rem;border-radius:6px;background:#FFF7ED;color:#C2410C;">⏳ BG Pending</span>')
+      +'</div>';
+    return '<div class="worker-card" id="wcard-'+realIndex+'" onclick="selectWorkerCard('+realIndex+')"><div class="worker-avatar" style="background:'+w.color+'">'+w.init+'</div><div class="worker-name">'+w.name+'</div>'+genderBadge+'<div class="worker-exp" style="margin-top:.4rem;">⏱ '+w.exp+' experience</div><div style="font-size:.78rem;color:var(--gray);margin:.2rem 0;">'+skillBadges+'</div><div class="stars">'+stars+' '+w.rating+'</div><div class="trust-badge">🛡 Trust Score: '+w.score+'</div><div style="margin:.4rem 0;">'+langs+'</div>'+docBadges+'<div class="worker-actions"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();showWorkerProfile('+realIndex+')">Profile</button><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();selectWorkerCard('+realIndex+')">Select</button></div></div>';
   }).join('');
 }
 function selectWorkerCard(i){
@@ -826,26 +1158,148 @@ function selectWorkerCard(i){
   document.getElementById('wcard-'+i).classList.add('selected');
   showToast(selectedWorker.name+' selected!','success');
 }
+function showWorkerProfile(i){
+  var w=workers[i];
+  var stars='★'.repeat(Math.round(parseFloat(w.rating)))+'☆'.repeat(5-Math.round(parseFloat(w.rating)));
+  var html='<div style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;" onclick="this.remove()">'
+    +'<div style="background:#fff;border-radius:20px;padding:2rem;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);" onclick="event.stopPropagation()">'
+    +'<div style="text-align:center;margin-bottom:1rem;">'
+    +'<div style="width:80px;height:80px;border-radius:50%;background:'+w.color+';display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;color:#fff;margin:0 auto .8rem;">'+w.init+'</div>'
+    +'<h3 style="font-weight:700;font-size:1.2rem;">'+w.name+'</h3>'
+    +'<div style="color:#F59E0B;font-size:1rem;margin:.3rem 0;">'+stars+' ('+w.rating+')</div>'
+    +'<div style="display:inline-block;background:#ECFDF5;color:#065F46;font-size:.75rem;font-weight:600;padding:.2rem .8rem;border-radius:20px;">🛡 Trust Score: '+w.score+'</div>'
+    +'</div>'
+    +'<table style="width:100%;border-collapse:collapse;font-size:.85rem;">'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;width:45%;">Experience</td><td style="font-weight:600;">'+w.exp+'</td></tr>'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;">Gender</td><td>'+w.gender+'</td></tr>'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;">Languages</td><td>'+w.lang.join(', ')+'</td></tr>'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;">Specialization</td><td>'+(w.skills||[]).join(', ')+'</td></tr>'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;">📱 Contact</td><td style="font-weight:600;">'+w.phone+'</td></tr>'
+    +'<tr style="background:#F0FDF4;"><td style="padding:.4rem;color:#065F46;border-radius:4px;">🪪 Aadhar</td><td style="font-weight:600;color:#065F46;">'+w.aadhar+'</td></tr>'
+    +'<tr style="background:#EFF6FF;"><td style="padding:.4rem;color:#1E40AF;">📄 Ration Card</td><td style="font-weight:600;color:#1E40AF;">'+w.ration+'</td></tr>'
+    +'<tr><td style="color:#6B7280;padding:.4rem 0;">Background Check</td><td>'+(w.bgCheck?'<span style="color:#065F46;font-weight:600;">✅ Verified</span>':'<span style="color:#C2410C;">⏳ Pending</span>')+'</td></tr>'
+    +'</table>'
+    +'<button onclick="this.closest(\'div[onclick]\').remove()" style="width:100%;margin-top:1.2rem;padding:.7rem;border:none;border-radius:10px;background:var(--primary);color:#fff;font-weight:600;cursor:pointer;font-family:var(--font);">Close</button>'
+    +'</div></div>';
+  document.body.insertAdjacentHTML('beforeend',html);
+}
 function showConfirm(){
   if(!selectedWorker){showToast('Please select a worker first','');return;}
   showPage('page-confirm');
 }
 
+var selectedPayment=null;
+
 function renderConfirm(){
-  document.getElementById('booking-id-val').textContent=Math.floor(10000+Math.random()*90000);
-  var w=parseInt(document.getElementById('b-workers').value)||1;
-  var d2=parseInt(document.getElementById('b-days').value)||1;
-  var total=basePrice*w*d2;
-  var det=document.getElementById('confirm-details');
-  var confirmCity=document.getElementById('b-city')?document.getElementById('b-city').value:selectedCity;
-  det.innerHTML='<div class="cd-row"><span class="cd-label">Service</span><span class="cd-val">'+(selectedService||'Home Cleaning')+'</span></div><div class="cd-row"><span class="cd-label">City</span><span class="cd-val">📍 '+(confirmCity||selectedCity||'—')+'</span></div><div class="cd-row"><span class="cd-label">Worker</span><span class="cd-val">'+(selectedWorker?selectedWorker.name:'Ravi Kumar')+'</span></div><div class="cd-row"><span class="cd-label">Date</span><span class="cd-val">'+(document.getElementById('b-date').value||'Tomorrow')+'</span></div><div class="cd-row"><span class="cd-label">Time</span><span class="cd-val">'+(document.getElementById('b-time').value||'09:00')+'</span></div><div class="cd-row"><span class="cd-label">Duration</span><span class="cd-val">'+w+' worker(s) × '+d2+' day(s)</span></div><div class="cd-row"><span class="cd-label">Total</span><span class="cd-val" style="color:var(--primary);font-size:1rem;">₹'+total.toLocaleString('en-IN')+'</span></div>';
-  document.getElementById('track-id').textContent=document.getElementById('booking-id-val').textContent;
-  spawnConfetti();
+  // Reset to the pending-payment state every time this page is entered —
+  // the booking is NOT saved/confirmed until finalizeBooking() runs.
+  selectedPayment=null;
+  document.querySelectorAll('#payment-opts-pending .pay-opt').forEach(function(o){o.classList.remove('selected');});
+  var perr=document.getElementById('payment-err');
+  if(perr) perr.style.display='none';
+  document.getElementById('confirm-pending-section').classList.remove('hidden');
+  document.getElementById('confirm-success-section').classList.add('hidden');
+
+  var t=computeBookingTotals();
+  var bookingDate=document.getElementById('b-date').value||new Date().toISOString().split('T')[0];
+  var bookingTime=document.getElementById('b-time').value||'09:00';
+  var workerName=selectedWorker?selectedWorker.name:'Ravi Kumar';
+  var det=document.getElementById('confirm-details-pending');
+  det.innerHTML='<div class="cd-row"><span class="cd-label">Service</span><span class="cd-val">'+(selectedService||'Home Cleaning')+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">City</span><span class="cd-val">📍 '+t.city+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Worker</span><span class="cd-val">'+workerName+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Date</span><span class="cd-val">'+bookingDate+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Time</span><span class="cd-val">'+bookingTime+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Duration</span><span class="cd-val">'+t.w+' worker(s) × '+t.d+' day(s) × '+t.h+' hrs/day</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Distance</span><span class="cd-val">'+t.distanceKm+' km</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Travel Charge</span><span class="cd-val">₹'+t.travelFee+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Total Payable</span><span class="cd-val" style="color:var(--primary);font-size:1rem;">₹'+t.grandTotal.toLocaleString('en-IN')+'</span></div>';
 }
+
 function selectPay(el){
-  document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('selected');});
+  document.querySelectorAll('#payment-opts-pending .pay-opt').forEach(function(o){o.classList.remove('selected');});
   el.classList.add('selected');
-  showToast('Payment method selected','success');
+  selectedPayment=el.textContent.trim();
+  var perr=document.getElementById('payment-err');
+  if(perr) perr.style.display='none';
+}
+
+function finalizeBooking(){
+  if(!selectedPayment){
+    document.getElementById('payment-err').style.display='block';
+    showToast('⚠️ Select a payment method to confirm your booking','');
+    return;
+  }
+  var bookingNum=Math.floor(10000+Math.random()*90000);
+  var bookingId='NA-'+bookingNum;
+  var t=computeBookingTotals();
+  var bookingDate=document.getElementById('b-date').value||new Date().toISOString().split('T')[0];
+  var bookingTime=document.getElementById('b-time').value||'09:00';
+  var workerName=selectedWorker?selectedWorker.name:'Ravi Kumar';
+
+  document.getElementById('booking-id-val').textContent=bookingNum;
+  document.getElementById('track-id').textContent=bookingNum;
+
+  var det=document.getElementById('confirm-details');
+  det.innerHTML='<div class="cd-row"><span class="cd-label">Service</span><span class="cd-val">'+(selectedService||'Home Cleaning')+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">City</span><span class="cd-val">📍 '+t.city+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Worker</span><span class="cd-val">'+workerName+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Date</span><span class="cd-val">'+bookingDate+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Time</span><span class="cd-val">'+bookingTime+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Duration</span><span class="cd-val">'+t.w+' worker(s) × '+t.d+' day(s) × '+t.h+' hrs/day</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Distance</span><span class="cd-val">'+t.distanceKm+' km</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Travel Charge</span><span class="cd-val">₹'+t.travelFee+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Payment Method</span><span class="cd-val">'+selectedPayment+'</span></div>'
+    +'<div class="cd-row"><span class="cd-label">Total Paid</span><span class="cd-val" style="color:var(--primary);font-size:1rem;">₹'+t.grandTotal.toLocaleString('en-IN')+'</span></div>';
+
+  // ── SAVE BOOKING TO BACKEND — only happens now, after payment is confirmed ──
+  var newBooking = {
+    id: bookingId,
+    service: selectedService || 'Home Cleaning',
+    worker: workerName,
+    city: t.city,
+    date: bookingDate,
+    time: bookingTime,
+    workers: t.w,
+    days: t.d,
+    hours: t.h,
+    genderPref: selectedGender || 'Any',
+    distanceKm: t.distanceKm,
+    travelFee: t.travelFee,
+    paymentMethod: selectedPayment,
+    amount: '₹' + t.grandTotal.toLocaleString('en-IN'),
+    totalNum: t.grandTotal,
+    status: 'Active',
+    bookedAt: new Date().toISOString()
+  };
+  addBooking(newBooking);
+  // ── Send SMS notification to admin ──────────────────────────────────────
+  var prof=loadProfile();
+  var token=localStorage.getItem('na_token');
+  if(token){
+    fetch(BASE+'/notify/booking',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({
+        bookingId:    bookingId,
+        service:      selectedService||'Home Cleaning',
+        worker:       workerName,
+        customerName: prof.name||currentUser,
+        customerPhone:prof.phone||'—',
+        city:         t.city,
+        date:         bookingDate,
+        time:         bookingTime,
+        paymentMethod:selectedPayment,
+        amount:       '₹'+t.grandTotal.toLocaleString('en-IN')
+      })
+    }).catch(function(){});
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
+  document.getElementById('confirm-pending-section').classList.add('hidden');
+  document.getElementById('confirm-success-section').classList.remove('hidden');
+  showToast('✅ Payment confirmed — booking placed!','success');
+  spawnConfetti();
 }
 function spawnConfetti(){
   var colors=['#6C3CE1','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899'];
@@ -861,48 +1315,248 @@ function spawnConfetti(){
 }
 
 var trackSteps=[
-  {label:'Requested',desc:'Your booking has been received',state:'done'},
-  {label:'Accepted',desc:'Worker has accepted your booking',state:'done'},
-  {label:'On the Way',desc:'Worker is heading to your location',state:'active'},
-  {label:'Work Started',desc:'Service in progress',state:'pending'},
-  {label:'Completed',desc:'Service successfully delivered',state:'pending'}
+  {label:'Booking Received',desc:'Your booking has been received & confirmed',state:'done',time:'Just now'},
+  {label:'Worker Assigned',desc:'Worker has accepted & is preparing',state:'done',time:'2 min ago'},
+  {label:'On the Way',desc:'Worker is heading to your location',state:'active',time:'Estimated 8 min'},
+  {label:'Work Started',desc:'Service in progress at your location',state:'pending',time:'—'},
+  {label:'Completed',desc:'Service successfully delivered',state:'pending',time:'—'}
 ];
 function renderTracking(){
   var cont=document.getElementById('tracking-steps');
   cont.innerHTML=trackSteps.map(function(s,i){
     var dot=s.state==='done'?'✓':s.state==='active'?'●':'○';
     var conn=i<trackSteps.length-1?'<div class="step-connector '+(s.state==='done'?'done':'')+'"></div>':'';
-    return '<div class="step-item"><div style="display:flex;flex-direction:column;align-items:center;"><div class="step-dot '+s.state+'">'+dot+'</div>'+conn+'</div><div class="step-info '+s.state+'"><h4>'+s.label+'</h4><p>'+s.desc+'</p></div></div>';
+    return '<div class="step-item"><div style="display:flex;flex-direction:column;align-items:center;"><div class="step-dot '+s.state+'">'+dot+'</div>'+conn+'</div><div class="step-info '+s.state+'"><h4>'+s.label+'</h4><p>'+s.desc+'</p><p style="font-size:.72rem;margin-top:.15rem;color:var(--primary);font-weight:500;">'+s.time+'</p></div></div>';
   }).join('');
+  // Animate ETA countdown
+  var eta=8;
+  var etaEl=document.getElementById('eta-counter');
+  if(etaEl){
+    clearInterval(window._etaTimer);
+    window._etaTimer=setInterval(function(){
+      if(eta>1){eta--;if(etaEl)etaEl.textContent=eta;}else{clearInterval(window._etaTimer);}
+    },8000);
+  }
+  // Animate worker dot moving
+  var dot=document.getElementById('worker-dot');
+  if(dot){setTimeout(function(){dot.style.left='48%';dot.style.top='62%';},2000);}
+  // Set worker name from selected worker
+  var tnEl=document.getElementById('track-worker-name');
+  if(tnEl&&selectedWorker){tnEl.textContent=selectedWorker.name.split(' ')[0]+' '+selectedWorker.name.split(' ').slice(-1)[0].charAt(0)+'.';}
+}
+function triggerSOS(){document.getElementById('sosModal').classList.remove('hidden');}
+function closeSOS(){document.getElementById('sosModal').classList.add('hidden');}
+function sendSOS(reason){
+  closeSOS();
+  showToast('🆘 SOS Alert sent! Support team will call you within 2 min. Reason: '+reason,'');
+  // ── Send SOS SMS to admin ─────────────────────────────────────────────
+  var prof=loadProfile();
+  var token=localStorage.getItem('na_token');
+  var activeBooking=bookingHistory.find(function(b){return b.status==='Active';});
+  if(token){
+    fetch(BASE+'/notify/sos',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({
+        customerName:  prof.name||currentUser,
+        customerPhone: prof.phone||'—',
+        address:       (prof.address?prof.address+', ':'')+prof.city+(prof.pincode?' - '+prof.pincode:''),
+        bookingId:     activeBooking?activeBooking.id:'—',
+        reason:        reason
+      })
+    }).catch(function(){});
+  }
+  // ─────────────────────────────────────────────────────────────────────
+  setTimeout(function(){
+    showToast('📞 NeatAura Support is calling you now...','success');
+  },3000);
+}
+function callWorker(){
+  var name=selectedWorker?selectedWorker.name:'your worker';
+  showToast('📞 Calling '+name+'...','');
+  setTimeout(function(){showToast('Call connected to '+name,'success');},2000);
 }
 
 function showDash(tab){
+  bookingHistory = getBookingHistory(); // refresh from localStorage
   document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active');});
   var items=document.querySelectorAll('.sidebar-item');
   var tabIdx={'overview':0,'bookings':1,'profile':2,'notifications':3};
   if(tabIdx[tab]!==undefined) items[tabIdx[tab]].classList.add('active');
   var main=document.getElementById('dashboard-main');
+
+  // ── LIVE STATS from localStorage ─────────────────────────────────────────
+  var total = bookingHistory.length;
+  var completed = bookingHistory.filter(function(b){return b.status==='Completed';}).length;
+  var active = bookingHistory.filter(function(b){return b.status==='Active';}).length;
+  var totalSpent = bookingHistory.reduce(function(sum,b){return sum+(b.totalNum||0);},0);
+  var spentStr = totalSpent > 0 ? '₹'+totalSpent.toLocaleString('en-IN') : '₹0';
+  // ─────────────────────────────────────────────────────────────────────────
+
+  function bookingRow(b, showAll) {
+    var statusClass = b.status==='Completed'?'badge-success':b.status==='Active'?'badge-info':'badge-danger';
+    var actions = b.status==='Active'
+      ? '<button class="btn btn-outline btn-sm" onclick="showPage(\'page-tracking\')" style="margin-right:.3rem;">Track</button><button class="btn btn-sm" style="background:var(--danger);color:#fff;" onclick="openCancelModal(\''+b.id+'\')">Cancel</button>'
+      : '<button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">Rebook</button>';
+    return '<tr><td><code style="font-size:.8rem;">#'+b.id+'</code></td><td>'+b.service+'</td><td>'+b.worker+'</td><td>'+b.date+'</td><td><span class="badge '+statusClass+'">'+b.status+'</span></td><td style="font-weight:600;">'+b.amount+'</td><td>'+actions+'</td></tr>';
+  }
+
   if(tab==='overview'){
-    main.innerHTML='<div class="dash-welcome"><h2>Good morning, '+currentUser+'! 👋</h2><p>Here\'s what\'s happening with your bookings.</p></div><div class="stats-grid"><div class="stat-card purple"><div class="stat-val">7</div><div class="stat-label">Total Bookings</div></div><div class="stat-card green"><div class="stat-val">5</div><div class="stat-label">Completed</div></div><div class="stat-card blue"><div class="stat-val">1</div><div class="stat-label">Active</div></div><div class="stat-card amber"><div class="stat-val">₹2,847</div><div class="stat-label">Total Spent</div></div></div><div class="bookings-table"><div class="table-header">Recent Bookings <button class="btn btn-outline btn-sm" onclick="showDash(\'bookings\')">View All</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Action</th></tr></thead><tbody>'+bookingHistory.slice(0,3).map(function(b){return '<tr><td><code style="font-size:.8rem;">#'+b.id+'</code></td><td>'+b.service+'</td><td>'+b.worker+'</td><td>'+b.date+'</td><td><span class="badge '+(b.status==='Completed'?'badge-success':b.status==='Active'?'badge-info':'badge-danger')+'">'+b.status+'</span></td><td style="font-weight:600;">'+b.amount+'</td><td>'+(b.status==='Active'?'<button class="btn btn-outline btn-sm" onclick="openModal()">Cancel</button>':'<button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">Rebook</button>')+'</td></tr>';}).join('')+'</tbody></table></div>';
+    var recentRows = bookingHistory.length > 0
+      ? bookingHistory.slice(0,3).map(function(b){return bookingRow(b);}).join('')
+      : '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:2rem;">No bookings yet. <a onclick="showPage(\'page-home\')" style="color:var(--primary);cursor:pointer;">Book your first service!</a></td></tr>';
+    main.innerHTML='<div class="dash-welcome"><h2>Good morning, '+currentUser+'! 👋</h2><p>Here\'s what\'s happening with your bookings.</p></div><div class="stats-grid"><div class="stat-card purple"><div class="stat-val">'+total+'</div><div class="stat-label">Total Bookings</div></div><div class="stat-card green"><div class="stat-val">'+completed+'</div><div class="stat-label">Completed</div></div><div class="stat-card blue"><div class="stat-val">'+active+'</div><div class="stat-label">Active</div></div><div class="stat-card amber"><div class="stat-val">'+spentStr+'</div><div class="stat-label">Total Spent</div></div></div><div class="bookings-table"><div class="table-header">Recent Bookings <button class="btn btn-outline btn-sm" onclick="showDash(\'bookings\')">View All</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Action</th></tr></thead><tbody>'+recentRows+'</tbody></table></div>';
   } else if(tab==='bookings'){
-    main.innerHTML='<div class="dash-welcome"><h2>My Bookings</h2><p>All your booking history</p></div><div class="bookings-table"><div class="table-header">All Bookings <button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">+ New Booking</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Actions</th></tr></thead><tbody>'+bookingHistory.map(function(b){return '<tr><td><code style="font-size:.8rem;">#'+b.id+'</code></td><td>'+b.service+'</td><td>'+b.worker+'</td><td>'+b.date+'</td><td><span class="badge '+(b.status==='Completed'?'badge-success':b.status==='Active'?'badge-info':'badge-danger')+'">'+b.status+'</span></td><td style="font-weight:600;">'+b.amount+'</td><td>'+(b.status==='Active'?'<button class="btn btn-outline btn-sm" onclick="showPage(\'page-tracking\')" style="margin-right:.3rem;">Track</button><button class="btn btn-sm" style="background:var(--danger);color:#fff;" onclick="openModal()">Cancel</button>':'<button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">Rebook</button>')+'</td></tr>';}).join('')+'</tbody></table></div>';
+    var allRows = bookingHistory.length > 0
+      ? bookingHistory.map(function(b){return bookingRow(b);}).join('')
+      : '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:2rem;">No bookings yet. <a onclick="showPage(\'page-home\')" style="color:var(--primary);cursor:pointer;">Book your first service!</a></td></tr>';
+    main.innerHTML='<div class="dash-welcome"><h2>My Bookings</h2><p>All your booking history ('+total+' total)</p></div><div class="bookings-table"><div class="table-header">All Bookings <button class="btn btn-primary btn-sm" onclick="showPage(\'page-home\')">+ New Booking</button></div><table><thead><tr><th>ID</th><th>Service</th><th>Worker</th><th>Date</th><th>Status</th><th>Amount</th><th>Actions</th></tr></thead><tbody>'+allRows+'</tbody></table></div>';
   } else if(tab==='profile'){
-    main.innerHTML='<div class="dash-welcome"><h2>My Profile</h2><p>Manage your account</p></div><div class="profile-card"><div class="profile-avatar">'+currentUser.charAt(0)+'</div><h3 style="font-size:1.3rem;font-weight:700;">'+currentUser+'</h3><p style="color:var(--gray);font-size:.9rem;">demo@neataura.com</p><p style="color:var(--gray);font-size:.85rem;margin-top:.3rem;">📍 Pollachi, Tamil Nadu</p><button class="btn btn-primary btn-sm" style="margin-top:1rem;">Edit Profile</button></div><div class="bookings-table"><div class="table-header">Account Details</div><table><tr><td style="color:var(--gray);width:40%;">Full Name</td><td style="font-weight:600;">'+currentUser+'</td></tr><tr><td style="color:var(--gray);">Phone</td><td>+91 9876543210</td></tr><tr><td style="color:var(--gray);">Address</td><td>123, Anna Nagar, Pollachi</td></tr><tr><td style="color:var(--gray);">Member Since</td><td>January 2024</td></tr><tr><td style="color:var(--gray);">Total Bookings</td><td style="font-weight:600;color:var(--primary);">7</td></tr></table></div>';
+    var prof=loadProfile();
+    var profComplete=isProfileComplete();
+    var completeBadge=profComplete
+      ?'<div style="display:inline-block;background:#ECFDF5;color:#065F46;font-size:.78rem;font-weight:700;padding:.3rem .9rem;border-radius:20px;margin-bottom:.5rem;">✅ Profile Complete — Booking Enabled</div>'
+      :'<div style="display:inline-block;background:#FEF2F2;color:#991B1B;font-size:.78rem;font-weight:700;padding:.3rem .9rem;border-radius:20px;margin-bottom:.5rem;">⚠️ Profile Incomplete — Cannot Book</div>';
+    main.innerHTML='<div class="dash-welcome"><h2>My Profile</h2><p>Manage your account details</p></div>'
+      +'<div class="profile-card"><div class="profile-avatar" id="prof-avatar">'+prof.name.charAt(0).toUpperCase()+'</div>'
+      +completeBadge
+      +'<h3 style="font-size:1.3rem;font-weight:700;" id="prof-display-name">'+prof.name+'</h3>'
+      +'<p style="color:var(--gray);font-size:.9rem;" id="prof-display-email">'+prof.email+'</p>'
+      +'<p style="color:var(--gray);font-size:.85rem;margin-top:.3rem;">📍 '+prof.city+' '+(prof.pincode?'- '+prof.pincode:'')+'</p>'
+      +'<button class="btn btn-primary btn-sm" style="margin-top:1rem;" onclick="showEditProfile()">✏️ Edit Profile</button></div>'
+      +'<div class="bookings-table" id="profile-view-section"><div class="table-header">Account Details</div>'
+      +'<table>'
+      +'<tr><td style="color:var(--gray);width:40%;">Full Name</td><td style="font-weight:600;">'+prof.name+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Email</td><td>'+prof.email+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Phone</td><td>'+(prof.phone||'<span style="color:var(--danger);">Not set</span>')+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Address</td><td>'+(prof.address||'<span style="color:var(--danger);">Not set</span>')+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">City</td><td>'+(prof.city||'<span style="color:var(--danger);">Not set</span>')+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Pincode</td><td>'+(prof.pincode||'<span style="color:var(--danger);">Not set</span>')+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Total Bookings</td><td style="font-weight:600;color:var(--primary);">'+total+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Active Now</td><td style="font-weight:600;color:var(--blue);">'+active+'</td></tr>'
+      +'<tr><td style="color:var(--gray);">Total Spent</td><td style="font-weight:600;color:var(--success);">'+spentStr+'</td></tr>'
+      +'</table></div>'
+      +'<div class="bookings-table hidden" id="profile-edit-section" style="margin-top:1rem;">'
+      +'<div class="table-header">Edit Profile</div>'
+      +'<div style="padding:1.5rem;display:grid;gap:1rem;">'
+      +'<div class="form-group" style="margin:0;"><label>Full Name <span style="color:var(--danger);">*</span></label><input id="edit-name" value="'+prof.name+'" placeholder="Your name"></div>'
+      +'<div class="form-group" style="margin:0;"><label>Email</label><input id="edit-email" type="email" value="'+prof.email+'" placeholder="Email address"></div>'
+      +'<div class="form-group" style="margin:0;"><label>Phone <span style="color:var(--danger);">*</span></label><input id="edit-phone" value="'+prof.phone+'" placeholder="+91 XXXXXXXXXX"></div>'
+      +'<div class="form-group" style="margin:0;"><label>Address <span style="color:var(--danger);">*</span></label><input id="edit-address" value="'+prof.address+'" placeholder="Your address"></div>'
+      +'<div class="form-group" style="margin:0;"><label>City <span style="color:var(--danger);">*</span></label><input id="edit-city" value="'+prof.city+'" placeholder="City, Tamil Nadu"></div>'
+      +'<div class="form-group" style="margin:0;"><label>Pincode <span style="color:var(--danger);">*</span></label><input id="edit-pincode" value="'+(prof.pincode||'')+'" placeholder="600001"></div>'
+      +'<div style="display:flex;gap:.8rem;margin-top:.5rem;">'
+      +'<button class="btn btn-primary" onclick="saveProfile()" style="flex:1;justify-content:center;">💾 Save Changes</button>'
+      +'<button class="btn btn-outline" onclick="cancelEditProfile()" style="flex:1;justify-content:center;">Cancel</button>'
+      +'</div></div></div>';
   } else if(tab==='notifications'){
-    var notifs=[
-      {icon:'✅',bg:'#ECFDF5',msg:'Your Home Cleaning booking is confirmed for tomorrow at 9:00 AM.',time:'2 min ago'},
-      {icon:'🚗',bg:'#EFF6FF',msg:'Ravi Kumar is on the way to your location.',time:'15 min ago'},
-      {icon:'⭐',bg:'#FFFBEB',msg:'Rate your last session with Meena Devi!',time:'2 hrs ago'},
+    var notifs=[];
+    if(bookingHistory.length>0){
+      var latest=bookingHistory[0];
+      notifs.push({icon:'✅',bg:'#ECFDF5',msg:'Your '+latest.service+' booking (#'+latest.id+') is confirmed for '+latest.date+' at '+latest.time+'.',time:'Just now'});
+    }
+    notifs=notifs.concat([
       {icon:'🔔',bg:'#F3F0FF',msg:'Special offer: 20% off on deep cleaning this weekend!',time:'1 day ago'},
-      {icon:'✓',bg:'#ECFDF5',msg:'Your AC Repair booking has been completed successfully.',time:'3 days ago'}
-    ];
+      {icon:'⭐',bg:'#FFFBEB',msg:'Rate your last completed session!',time:'2 hrs ago'}
+    ]);
     main.innerHTML='<div class="dash-welcome"><h2>Notifications</h2><p>Stay updated on your bookings</p></div><div class="notif-list">'+notifs.map(function(n){return '<div class="notif-item"><div class="notif-icon" style="background:'+n.bg+'">'+n.icon+'</div><div><p style="font-size:.88rem;">'+n.msg+'</p><p style="font-size:.75rem;color:var(--gray);margin-top:.2rem;">'+n.time+'</p></div></div>';}).join('')+'</div>';
   }
 }
 
-function openModal(){document.getElementById('cancelModal').classList.remove('hidden');}
-function closeModal(){document.getElementById('cancelModal').classList.add('hidden');}
-function confirmCancel(){closeModal();showToast('Booking cancelled','');}
+// ─── PROFILE STORAGE ─────────────────────────────────────────────────────────
+var PROFILE_KEY = 'neataura_profile_v1';
+function loadProfile(){
+  try {
+    var raw = localStorage.getItem(PROFILE_KEY);
+    var saved = raw ? JSON.parse(raw) : {};
+    return {
+      name:    saved.name    || currentUser || 'User',
+      email:   saved.email   || localStorage.getItem('na_user_email') || '—',
+      phone:   saved.phone   || '',
+      address: saved.address || '',
+      city:    saved.city    || '',
+      pincode: saved.pincode || ''
+    };
+  } catch(e) {
+    return {name:currentUser,email:'—',phone:'',address:'',city:'',pincode:''};
+  }
+}
+function saveDetailsAndContinue(){
+  var name=document.getElementById('details-name').value.trim();
+  var phone=document.getElementById('details-phone').value.trim();
+  var address=document.getElementById('details-address').value.trim();
+  var city=document.getElementById('details-city').value;
+  var pincode=document.getElementById('details-pincode').value.trim();
+  var errEl=document.getElementById('details-err');
+  if(!name||!phone||!address||!city||!pincode){
+    errEl.style.display='block';
+    errEl.textContent='⚠️ All fields are required. Please fill in your full name, phone, address, city and pincode.';
+    return;
+  }
+  if(!/^\d{6}$/.test(pincode)){errEl.style.display='block';errEl.textContent='⚠️ Enter a valid 6-digit pincode.';return;}
+  if(!/^[\d\s\+\-]{10,15}$/.test(phone)){errEl.style.display='block';errEl.textContent='⚠️ Enter a valid phone number (10-15 digits).';return;}
+  errEl.style.display='none';
+  var existing={};try{var r=localStorage.getItem(PROFILE_KEY);if(r)existing=JSON.parse(r);}catch(e){}
+  var updated={name:name,email:existing.email||'demo@neataura.com',phone:phone,address:address,city:city,pincode:pincode};
+  try{localStorage.setItem(PROFILE_KEY,JSON.stringify(updated));}catch(e){}
+  currentUser=name;
+  if(city) selectCity(city);
+  showToast('✅ Profile saved! You can now book services.','success');
+  showPage('page-home');
+}
+function showSkipWarning(){
+  document.getElementById('skipWarningModal').classList.remove('hidden');
+}
+function closeSkipWarning(){
+  document.getElementById('skipWarningModal').classList.add('hidden');
+  showPage('page-details');
+}
+function confirmSkipDetails(){
+  document.getElementById('skipWarningModal').classList.add('hidden');
+  showToast('⚠️ Reminder: complete your profile before you can book a service.','');
+  showPage('page-home');
+}
+function showEditProfile(){
+  document.getElementById('profile-view-section').classList.add('hidden');
+  document.getElementById('profile-edit-section').classList.remove('hidden');
+}
+function cancelEditProfile(){
+  document.getElementById('profile-edit-section').classList.add('hidden');
+  document.getElementById('profile-view-section').classList.remove('hidden');
+}
+function saveProfile(){
+  var updated = {
+    name:    document.getElementById('edit-name').value.trim()    || currentUser,
+    email:   document.getElementById('edit-email').value.trim()   || 'demo@neataura.com',
+    phone:   document.getElementById('edit-phone').value.trim()   || '',
+    address: document.getElementById('edit-address').value.trim() || '',
+    city:    document.getElementById('edit-city').value.trim()    || '',
+    pincode: document.getElementById('edit-pincode') ? document.getElementById('edit-pincode').value.trim() : ''
+  };
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(updated)); } catch(e){}
+  currentUser = updated.name;
+  showToast('Profile saved successfully!','success');
+  showDash('profile');
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+var cancelTargetId = null;
+function openModal(){openCancelModal(null);}
+function openCancelModal(id){
+  cancelTargetId = id;
+  document.getElementById('cancelModal').classList.remove('hidden');
+}
+function closeModal(){document.getElementById('cancelModal').classList.add('hidden');cancelTargetId=null;}
+function confirmCancel(){
+  if(cancelTargetId){
+    cancelBookingById(cancelTargetId);
+    showToast('Booking #'+cancelTargetId+' cancelled','');
+  } else {
+    showToast('Booking cancelled','');
+  }
+  closeModal();
+  showDash('bookings');
+}
 
 function showToast(msg,type){
   var t=document.getElementById('toast');
@@ -912,6 +1566,24 @@ function showToast(msg,type){
   setTimeout(function(){t.classList.remove('show');},3000);
 }
 
+
+// ─── EVENT LISTENERS (replaces inline handlers) ─────────────────────────────
+(function(){
+  function on(id, evt, fn){ var el=document.getElementById(id); if(el) el.addEventListener(evt, fn); }
+  on('city-search-input','input', filterCities);
+  on('reg-username','input', validateUsername);
+  on('reg-email','input', validateEmail);
+  on('reg-password','input', validatePassword);
+  on('reg-confirm','input', validateConfirm);
+  on('search-input','input', showSuggestions);
+  on('search-input','blur', hideSuggestions);
+  on('details-city','change', applyDetailsCity);
+  on('b-workers','change', function(){ updateSuggestion(); updateSummary(); });
+  on('b-days','change', updateSummary);
+  on('b-hours','change', function(){ updateSuggestion(); updateSummary(); });
+  on('b-desc','input', updateSuggestion);
+  on('b-city','change', updateSummary);
+})();
 showPage('page-register');
 </script>
 </body>
