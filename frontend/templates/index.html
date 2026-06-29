@@ -1277,7 +1277,7 @@ function finalizeBooking(){
   var prof=loadProfile();
   var token=localStorage.getItem('na_token');
   if(token){
-    fetch(BASE+'/notify/booking',{
+    fetch(BASE+'/api/notify/booking'),{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
       body:JSON.stringify({
@@ -1354,7 +1354,7 @@ function sendSOS(reason){
   var token=localStorage.getItem('na_token');
   var activeBooking=bookingHistory.find(function(b){return b.status==='Active';});
   if(token){
-    fetch(BASE+'/notify/sos',{
+    fetch(BASE+'/api/notify/sos',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
       body:JSON.stringify({
