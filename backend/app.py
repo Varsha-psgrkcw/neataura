@@ -388,5 +388,19 @@ def serve_frontend():
 def serve_js(filename):
     return send_from_directory("../frontend/static/js", filename)
 
+@app.get("/api/test-email")
+def test_email():
+    import os
+    sender   = os.environ.get("GMAIL_USER")
+    password = os.environ.get("GMAIL_PASS")
+    receiver = os.environ.get("NOTIFY_EMAIL")
+    if not sender or not password:
+        return jsonify({"error": "GMAIL_USER or GMAIL_PASS not set", "sender": sender, "receiver": receiver})
+    try:
+        send_email("NeatAura Test Email", "<h2>This is a test from NeatAura!</h2><p>Email notifications are working!</p>")
+        return jsonify({"success": True, "sent_to": receiver})
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
