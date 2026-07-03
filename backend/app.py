@@ -243,120 +243,85 @@ def update_profile():
     return jsonify({"message": "Profile updated"})
 
 # ─── Gmail Email Notifications ───────────────────────────────
-# Add these in Render → Environment:
-#   GMAIL_USER = yourgmail@gmail.com       (the Gmail you send FROM)
-#   GMAIL_PASS = xxxx xxxx xxxx xxxx       (App Password — 16 digits, see setup guide)
-#   NOTIFY_EMAIL = yourgmail@gmail.com     (the Gmail you want to RECEIVE alerts — can be same)
-
 def send_email(subject, html_body):
-    """Send email alert to owner. Runs in background so it doesn't slow the app."""
     def _send():
         sender   = os.environ.get("GMAIL_USER")
-        password = os.environ.get("GMAIL_PASS")
+        password = os.environ.get("GMAIL_PASS", "").replace(" ", "")
         receiver = os.environ.get("NOTIFY_EMAIL", sender)
-
         if not sender or not password:
-            print("[Email] GMAIL_USER or GMAIL_PASS not set — skipping")
+            print("[Email] GMAIL_USER or GMAIL_PASS not set")
             return
         try:
             msg = MIMEMultipart("alternative")
             msg["Subject"] = subject
-            msg["From"]    = f"NeatAura Alerts <{sender}>"
+            msg["From"]    = sender
             msg["To"]      = receiver
             msg.attach(MIMEText(html_body, "html"))
-
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            # Try port 587 with TLS
+            with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+                smtp.ehlo()
+                smtp.starttls()
+                smtp.ehlo()
                 smtp.login(sender, password)
                 smtp.sendmail(sender, receiver, msg.as_string())
-            print(f"[Email] Alert sent to {receiver}")
+            print(f"[Email] Sent to {receiver}")
         except Exception as e:
-            print(f"[Email] Failed: {e}")
+            print(f"[Email] Error: {e}")
+            # Fallback: try port 465 SSL
+            try:
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+                    smtp.login(sender, password)
+                    smtp.sendmail(sender, receiver, msg.as_string())
+                print(f"[Email] Sent via SSL to {receiver}")
+            except Exception as e2:
+                print(f"[Email] SSL also failed: {e2}")
     threading.Thread(target=_send, daemon=True).start()
 
 
-def booking_email_html(d, uname, uemail, uphone):
-    return f"""
-    <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
-      <div style="background:#6C3CE1;padding:20px 24px;">
-        <h2 style="color:#fff;margin:0;font-size:20px;">🔔 New Booking — NeatAura</h2>
-      </div>
-      <div style="padding:24px;background:#fff;">
-        <table style="width:100%;border-collapse:collapse;">
-          <tr><td style="padding:8px 0;color:#6b7280;width:40%;">Booking ID</td>
-              <td style="padding:8px 0;font-weight:600;">#{d.get('booking_id','—')}</td></tr>
-          <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Service</td>
-              <td style="padding:8px 6px;font-weight:600;">{d.get('service','—')}</td></tr>
-          <tr><td style="padding:8px 0;color:#6b7280;">Worker</td>
-              <td style="padding:8px 0;font-weight:600;">{d.get('worker','—')}</td></tr>
-          <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Date &amp; Time</td>
-              <td style="padding:8px 6px;font-weight:600;">{d.get('date','—')} at {d.get('time','—')}</td></tr>
-          <tr><td style="padding:8px 0;color:#6b7280;">City</td>
-              <td style="padding:8px 0;font-weight:600;">{d.get('city','—')}</td></tr>
-          <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Workers</td>
-              <td style="padding:8px 6px;font-weight:600;">{d.get('num_workers',1)} worker(s) × {d.get('num_days',1)} day(s)</td></tr>
-          <tr><td style="padding:8px 0;color:#6b7280;">Payment</td>
-              <td style="padding:8px 0;font-weight:600;">{d.get('payment','—')}</td></tr>
-          <tr style="background:#ecfdf5;"><td style="padding:10px 6px;color:#065f46;font-weight:700;">Total Amount</td>
-              <td style="padding:10px 6px;color:#065f46;font-weight:700;font-size:18px;">₹{d.get('total','0')}</td></tr>
-        </table>
-        <div style="margin-top:20px;padding:16px;background:#f3f0ff;border-radius:8px;">
-          <p style="margin:0;font-size:13px;color:#4b5563;font-weight:600;">👤 Customer Details</p>
-          <p style="margin:6px 0 2px;font-size:14px;">Name: <strong>{uname}</strong></p>
-          <p style="margin:2px 0;">Email: <strong>{uemail}</strong></p>
-          <p style="margin:2px 0;">Phone: <strong>{uphone}</strong></p>
-        </div>
-      </div>
-      <div style="padding:14px 24px;background:#f9fafb;text-align:center;font-size:12px;color:#9ca3af;">
-        NeatAura • {datetime.now().strftime('%d %b %Y, %I:%M %p')}
-      </div>
-    </div>
-    """
-
-def sos_email_html(d, uname, uphone):
-    return f"""
-    <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;border:2px solid #ef4444;border-radius:12px;overflow:hidden;">
-      <div style="background:#ef4444;padding:20px 24px;">
-        <h2 style="color:#fff;margin:0;font-size:22px;">🆘 SOS EMERGENCY — NeatAura</h2>
-      </div>
-      <div style="padding:24px;background:#fff;">
-        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin-bottom:16px;">
-          <p style="margin:0;color:#991b1b;font-weight:700;font-size:16px;">⚠️ Reason: {d.get('reason','—')}</p>
-        </div>
-        <table style="width:100%;border-collapse:collapse;">
-          <tr><td style="padding:8px 0;color:#6b7280;width:40%;">Booking ID</td>
-              <td style="padding:8px 0;font-weight:600;">#{d.get('booking_id','—')}</td></tr>
-          <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Customer</td>
-              <td style="padding:8px 6px;font-weight:600;">{uname}</td></tr>
-          <tr><td style="padding:8px 0;color:#6b7280;">Phone</td>
-              <td style="padding:8px 0;font-weight:700;font-size:16px;color:#dc2626;">{uphone}</td></tr>
-          <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Address</td>
-              <td style="padding:8px 6px;font-weight:600;">{d.get('address','—')}</td></tr>
-          <tr><td style="padding:8px 0;color:#6b7280;">Time</td>
-              <td style="padding:8px 0;">{datetime.now().strftime('%d %b %Y, %I:%M %p')}</td></tr>
-        </table>
-        <div style="margin-top:20px;padding:14px;background:#fef2f2;border-radius:8px;text-align:center;">
-          <p style="margin:0;color:#991b1b;font-weight:700;font-size:15px;">🚨 Please call the customer immediately!</p>
-        </div>
-      </div>
-    </div>
-    """
+@app.get("/api/test-email")
+def test_email():
+    sender   = os.environ.get("GMAIL_USER")
+    password = os.environ.get("GMAIL_PASS", "").replace(" ", "")
+    receiver = os.environ.get("NOTIFY_EMAIL", sender)
+    if not sender or not password:
+        return jsonify({"error": "GMAIL_USER or GMAIL_PASS not set"})
+    send_email(
+        "🔔 NeatAura Test Email",
+        "<h2>✅ NeatAura Email Working!</h2><p>Your booking and SOS alerts will be sent here.</p>"
+    )
+    return jsonify({"success": True, "sent_to": receiver, "from": sender})
 
 
 @app.post("/api/notify/booking")
 @require_auth
 def notify_booking():
     d    = request.json or {}
-    user = db_query(
-        "SELECT username, email, phone FROM users WHERE id=?",
-        (request.user_id,), one=True
-    )
+    user = db_query("SELECT username, email, phone FROM users WHERE id=?", (request.user_id,), one=True)
     uname  = user["username"] if user else "Unknown"
     uemail = user["email"]    if user else "—"
     uphone = user["phone"]    if user else "—"
-
     send_email(
-        subject   = f"🔔 New Booking #{d.get('booking_id','?')} — {d.get('service','NeatAura')}",
-        html_body = booking_email_html(d, uname, uemail, uphone)
+        f"🔔 New Booking #{d.get('booking_id','?')} — NeatAura",
+        f"""<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+        <div style="background:#6C3CE1;padding:20px 24px;"><h2 style="color:#fff;margin:0;">🔔 New Booking — NeatAura</h2></div>
+        <div style="padding:24px;">
+        <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:8px 0;color:#6b7280;width:40%;">Booking ID</td><td style="font-weight:600;">#{d.get('booking_id','—')}</td></tr>
+        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Service</td><td style="padding:8px 6px;font-weight:600;">{d.get('service','—')}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">Worker</td><td style="font-weight:600;">{d.get('worker','—')}</td></tr>
+        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Date & Time</td><td style="padding:8px 6px;font-weight:600;">{d.get('date','—')} at {d.get('time','—')}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">City</td><td style="font-weight:600;">{d.get('city','—')}</td></tr>
+        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Payment</td><td style="padding:8px 6px;font-weight:600;">{d.get('payment','—')}</td></tr>
+        <tr style="background:#ecfdf5;"><td style="padding:10px 6px;color:#065f46;font-weight:700;">Total</td><td style="padding:10px 6px;color:#065f46;font-weight:700;font-size:18px;">₹{d.get('total','0')}</td></tr>
+        </table>
+        <div style="margin-top:16px;padding:14px;background:#f3f0ff;border-radius:8px;">
+        <p style="margin:0;font-weight:600;">👤 Customer</p>
+        <p style="margin:4px 0;">Name: <strong>{uname}</strong></p>
+        <p style="margin:2px 0;">Email: <strong>{uemail}</strong></p>
+        <p style="margin:2px 0;">Phone: <strong>{uphone}</strong></p>
+        </div></div>
+        <div style="padding:12px 24px;background:#f9fafb;text-align:center;font-size:12px;color:#9ca3af;">NeatAura • {datetime.now().strftime('%d %b %Y, %I:%M %p')}</div>
+        </div>"""
     )
     return jsonify({"ok": True})
 
@@ -365,16 +330,26 @@ def notify_booking():
 @require_auth
 def notify_sos():
     d    = request.json or {}
-    user = db_query(
-        "SELECT username, phone FROM users WHERE id=?",
-        (request.user_id,), one=True
-    )
+    user = db_query("SELECT username, phone FROM users WHERE id=?", (request.user_id,), one=True)
     uname  = user["username"] if user else "Unknown"
     uphone = user["phone"]    if user else "—"
-
     send_email(
-        subject   = f"🆘 SOS EMERGENCY from {uname} — NeatAura",
-        html_body = sos_email_html(d, uname, uphone)
+        f"🆘 SOS EMERGENCY from {uname} — NeatAura",
+        f"""<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;border:2px solid #ef4444;border-radius:12px;overflow:hidden;">
+        <div style="background:#ef4444;padding:20px 24px;"><h2 style="color:#fff;margin:0;">🆘 SOS EMERGENCY — NeatAura</h2></div>
+        <div style="padding:24px;">
+        <div style="background:#fef2f2;border-radius:8px;padding:14px;margin-bottom:14px;">
+        <p style="margin:0;color:#991b1b;font-weight:700;font-size:16px;">⚠️ Reason: {d.get('reason','—')}</p></div>
+        <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:8px 0;color:#6b7280;width:40%;">Booking</td><td style="font-weight:600;">#{d.get('booking_id','—')}</td></tr>
+        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Customer</td><td style="padding:8px 6px;font-weight:600;">{uname}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="font-weight:700;color:#dc2626;font-size:16px;">{uphone}</td></tr>
+        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Address</td><td style="padding:8px 6px;font-weight:600;">{d.get('address','—')}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">Time</td><td>{datetime.now().strftime('%d %b %Y, %I:%M %p')}</td></tr>
+        </table>
+        <div style="margin-top:14px;padding:12px;background:#fef2f2;border-radius:8px;text-align:center;">
+        <p style="margin:0;color:#991b1b;font-weight:700;">🚨 Please call the customer immediately!</p></div>
+        </div></div>"""
     )
     return jsonify({"ok": True})
 
@@ -387,20 +362,6 @@ def serve_frontend():
 @app.get("/static/js/<path:filename>")
 def serve_js(filename):
     return send_from_directory("../frontend/static/js", filename)
-
-@app.get("/api/test-email")
-def test_email():
-    import os
-    sender   = os.environ.get("GMAIL_USER")
-    password = os.environ.get("GMAIL_PASS")
-    receiver = os.environ.get("NOTIFY_EMAIL")
-    if not sender or not password:
-        return jsonify({"error": "GMAIL_USER or GMAIL_PASS not set", "sender": sender, "receiver": receiver})
-    try:
-        send_email("NeatAura Test Email", "<h2>This is a test from NeatAura!</h2><p>Email notifications are working!</p>")
-        return jsonify({"success": True, "sent_to": receiver})
-    except Exception as e:
-        return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
