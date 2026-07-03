@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import os, jwt, bcrypt, smtplib, threading
+import os, jwt, bcrypt, threading, urllib.request, json as _json
 from datetime import datetime, timedelta
 from functools import wraps
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 # ─── Use PostgreSQL on Render, SQLite locally ─────────────────
 DATABASE_URL = os.environ.get("DATABASE_URL")
@@ -242,39 +240,37 @@ def update_profile():
     )
     return jsonify({"message": "Profile updated"})
 
-# ─── Gmail Email Notifications ───────────────────────────────
+# ─── SendGrid Email Notifications ────────────────────────────
 def send_email(subject, html_body):
     def _send():
+        api_key  = os.environ.get("SENDGRID_KEY")
         sender   = os.environ.get("GMAIL_USER")
-        password = os.environ.get("GMAIL_PASS", "").replace(" ", "")
         receiver = os.environ.get("NOTIFY_EMAIL", sender)
-        if not sender or not password:
-            print("[Email] GMAIL_USER or GMAIL_PASS not set")
+        if not api_key or not sender:
+            print("[Email] SENDGRID_KEY or GMAIL_USER not set")
             return
         try:
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = subject
-            msg["From"]    = sender
-            msg["To"]      = receiver
-            msg.attach(MIMEText(html_body, "html"))
-            # Try port 587 with TLS
-            with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-                smtp.ehlo()
-                smtp.starttls()
-                smtp.ehlo()
-                smtp.login(sender, password)
-                smtp.sendmail(sender, receiver, msg.as_string())
-            print(f"[Email] Sent to {receiver}")
+            payload = _json.dumps({
+                "personalizations": [{"to": [{"email": receiver}]}],
+                "from": {"email": sender, "name": "NeatAura"},
+                "subject": subject,
+                "content": [{"type": "text/html", "value": html_body}]
+            }).encode()
+            req = urllib.request.Request(
+                "https://api.sendgrid.com/v3/mail/send",
+                data    = payload,
+                headers = {
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type":  "application/json"
+                },
+                method = "POST"
+            )
+            res = urllib.request.urlopen(req, timeout=10)
+            print(f"[Email] Sent to {receiver} — status {res.status}")
+        except urllib.error.HTTPError as e:
+            print(f"[Email] SendGrid error {e.code}: {e.read().decode()}")
         except Exception as e:
             print(f"[Email] Error: {e}")
-            # Fallback: try port 465 SSL
-            try:
-                with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-                    smtp.login(sender, password)
-                    smtp.sendmail(sender, receiver, msg.as_string())
-                print(f"[Email] Sent via SSL to {receiver}")
-            except Exception as e2:
-                print(f"[Email] SSL also failed: {e2}")
     threading.Thread(target=_send, daemon=True).start()
 
 
