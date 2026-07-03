@@ -283,10 +283,11 @@ tr:hover td{background:#F9F8FF;}
     <div style="text-align:center;margin-bottom:1.5rem;"><div class="logo" style="font-size:2rem;">Neat<span>Aura</span></div><div style="font-size:.8rem;color:var(--gray);margin-top:.3rem;">Smart Technical Services</div></div>
     <h2>Create Account</h2>
     <p class="sub">Join thousands booking trusted workers</p>
-    <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Enter your username"><div class="validation-msg" id="username-msg"></div></div>
-    <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com"><div class="validation-msg" id="email-msg"></div></div>
-    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="reg-password" placeholder="Min. 8 characters"><span class="pw-toggle" onclick="togglePw('reg-password',this)">👁</span></div><div class="validation-msg" id="password-msg"></div></div>
-    <div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input type="password" id="reg-confirm" placeholder="Re-enter password"><span class="pw-toggle" onclick="togglePw('reg-confirm',this)">👁</span></div><div class="validation-msg" id="confirm-msg"></div></div>
+    <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Enter your username" autocomplete="off"><div class="validation-msg" id="username-msg"></div></div>
+    <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" autocomplete="off"><div class="validation-msg" id="email-msg"></div></div>
+    <div class="form-group"><label>Password</label><div class="pw-wrap"><input type="password" id="reg-password" placeholder="Min. 8 characters" autocomplete="new-password"><span class="pw-toggle" onclick="togglePw('reg-password',this)">👁</span></div><div class="validation-msg" id="password-msg"></div></div>
+    <div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input type="password" id="reg-confirm" placeholder="Re-enter password" autocomplete="new-password"><span class="pw-toggle" onclick="togglePw('reg-confirm',this)">👁</span></div><div class="validation-msg" id="confirm-msg"></div></div>
+    <div id="reg-err" style="display:none;color:var(--danger);font-size:.83rem;margin-bottom:1rem;background:#FEF2F2;padding:.6rem 1rem;border-radius:8px;border-left:3px solid var(--danger);"></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doRegister()">Create Account →</button>
     <div class="auth-switch">Already have an account? <a onclick="showPage('page-login')">Sign In</a></div>
   </div>
@@ -320,7 +321,7 @@ tr:hover td{background:#F9F8FF;}
       <div class="f-card">🔒 Verified & Trusted</div>
     </div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <button class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem;" onclick="showPage('page-details')">Get Started →</button>
+      <button class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem;" onclick="goGetStarted()">Get Started →</button>
       <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="showSkipWarning()">Skip Setup</button>
     </div>
   </div>
@@ -910,16 +911,36 @@ showPage = function(id){
 };
 
 // ═══════════════════════════════════════════════
-// FIX 2: Real register with backend
+// New user → details page, existing → home
 // ═══════════════════════════════════════════════
+function goGetStarted(){
+  var prof = loadProfile();
+  // New user = no profile saved yet
+  if(!prof.phone || !prof.address || !prof.city || !prof.pincode){
+    _origShowPage('page-details');
+  } else {
+    _origShowPage('page-home');
+  }
+}
 function doRegister(){
   var u=document.getElementById('reg-username').value.trim();
   var e=document.getElementById('reg-email').value.trim();
   var p=document.getElementById('reg-password').value;
   var c=document.getElementById('reg-confirm').value;
+  var errEl=document.getElementById('reg-err');
+
+  // Clear error
+  if(errEl){ errEl.style.display='none'; errEl.textContent=''; }
+
   if(!u||!e||!p||!c){ showToast('Please fill all fields',''); return; }
-  if(p!==c){ showToast('Passwords do not match',''); return; }
-  if(p.length<8){ showToast('Password must be at least 8 characters',''); return; }
+  if(p!==c){
+    if(errEl){ errEl.style.display='block'; errEl.textContent='⚠️ Passwords do not match'; }
+    return;
+  }
+  if(p.length<8){
+    if(errEl){ errEl.style.display='block'; errEl.textContent='⚠️ Password must be at least 8 characters'; }
+    return;
+  }
 
   fetch(API_BASE+'/api/register',{
     method:'POST', headers:{'Content-Type':'application/json'},
@@ -927,7 +948,11 @@ function doRegister(){
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    if(d.error){ showToast(d.error,''); return; }
+    if(d.error){
+      if(errEl){ errEl.style.display='block'; errEl.textContent='⚠️ '+d.error; }
+      showToast(d.error,'');
+      return;
+    }
     // Auto login after register
     return fetch(API_BASE+'/api/login',{
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -939,6 +964,8 @@ function doRegister(){
         setToken(ld.token);
         localStorage.setItem('na_user', ld.username||u);
         localStorage.setItem('na_email', e);
+        // Mark as new user so details page shows
+        localStorage.removeItem('neataura_profile_v1');
       }
       currentUser = ld.username||u;
       document.getElementById('welcome-name').textContent = currentUser;
