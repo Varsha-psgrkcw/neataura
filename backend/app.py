@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import os, jwt, bcrypt, threading, urllib.request, json as _json
+import os, jwt, bcrypt
 from datetime import datetime, timedelta
 from functools import wraps
 
@@ -30,6 +30,45 @@ app = Flask(__name__, static_folder="../frontend/static")
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "neataura-secret-key-change-in-production")
+
+# ─── Auto-initialize database on startup ─────────────────────────
+def init_database():
+    sql_path = os.path.join(os.path.dirname(__file__), "../database/schema.sql")
+    if not os.path.exists(sql_path):
+        return
+    with open(sql_path, "r") as f:
+        sql = f.read()
+    if DATABASE_URL:
+        try:
+            import psycopg2
+            conn = psycopg2.connect(DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            statements = [s.strip() for s in sql.split(";") if s.strip()]
+            for stmt in statements:
+                try:
+                    cur.execute(stmt)
+                except Exception:
+                    pass
+            conn.close()
+            print("✅ PostgreSQL database ready")
+        except Exception as e:
+            print(f"[DB Init] PostgreSQL error: {e}")
+    else:
+        try:
+            import sqlite3
+            db_path = os.path.join(os.path.dirname(__file__), "../database/neataura.db")
+            sql_lite = sql.replace("SERIAL PRIMARY KEY", "INTEGER PRIMARY KEY AUTOINCREMENT")
+            sql_lite = sql_lite.replace("ON CONFLICT DO NOTHING", "OR IGNORE")
+            conn = sqlite3.connect(db_path)
+            conn.executescript(sql_lite)
+            conn.commit()
+            conn.close()
+            print(f"✅ SQLite database ready at {db_path}")
+        except Exception as e:
+            print(f"[DB Init] SQLite error: {e}")
+
+init_database()
 
 # ─── DB query helper ──────────────────────────────────────────
 def db_query(sql, params=(), one=False, write=False):
@@ -240,14 +279,16 @@ def update_profile():
     )
     return jsonify({"message": "Profile updated"})
 
-# ─── SendGrid Email Notifications ────────────────────────────
+# ─── SendGrid Email Notifications ────────────────────────────────
+import urllib.request, json as _json, threading
+
 def send_email(subject, html_body):
     def _send():
         api_key  = os.environ.get("SENDGRID_KEY")
         sender   = os.environ.get("GMAIL_USER")
         receiver = os.environ.get("NOTIFY_EMAIL", sender)
         if not api_key or not sender:
-            print("[Email] SENDGRID_KEY or GMAIL_USER not set")
+            print("[Email] SENDGRID_KEY or GMAIL_USER not set — skipping")
             return
         try:
             payload = _json.dumps({
@@ -258,35 +299,24 @@ def send_email(subject, html_body):
             }).encode()
             req = urllib.request.Request(
                 "https://api.sendgrid.com/v3/mail/send",
-                data    = payload,
-                headers = {
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type":  "application/json"
-                },
-                method = "POST"
+                data=payload,
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                method="POST"
             )
             res = urllib.request.urlopen(req, timeout=10)
             print(f"[Email] Sent to {receiver} — status {res.status}")
-        except urllib.error.HTTPError as e:
-            print(f"[Email] SendGrid error {e.code}: {e.read().decode()}")
         except Exception as e:
             print(f"[Email] Error: {e}")
     threading.Thread(target=_send, daemon=True).start()
 
-
 @app.get("/api/test-email")
 def test_email():
     sender   = os.environ.get("GMAIL_USER")
-    password = os.environ.get("GMAIL_PASS", "").replace(" ", "")
     receiver = os.environ.get("NOTIFY_EMAIL", sender)
-    if not sender or not password:
-        return jsonify({"error": "GMAIL_USER or GMAIL_PASS not set"})
-    send_email(
-        "🔔 NeatAura Test Email",
-        "<h2>✅ NeatAura Email Working!</h2><p>Your booking and SOS alerts will be sent here.</p>"
-    )
-    return jsonify({"success": True, "sent_to": receiver, "from": sender})
-
+    if not sender:
+        return jsonify({"error": "GMAIL_USER not set"})
+    send_email("🔔 NeatAura Test Email", "<h2>✅ NeatAura Email Working!</h2><p>Booking and SOS alerts will be sent here.</p>")
+    return jsonify({"success": True, "sent_to": receiver})
 
 @app.post("/api/notify/booking")
 @require_auth
@@ -311,16 +341,12 @@ def notify_booking():
         <tr style="background:#ecfdf5;"><td style="padding:10px 6px;color:#065f46;font-weight:700;">Total</td><td style="padding:10px 6px;color:#065f46;font-weight:700;font-size:18px;">₹{d.get('total','0')}</td></tr>
         </table>
         <div style="margin-top:16px;padding:14px;background:#f3f0ff;border-radius:8px;">
-        <p style="margin:0;font-weight:600;">👤 Customer</p>
-        <p style="margin:4px 0;">Name: <strong>{uname}</strong></p>
-        <p style="margin:2px 0;">Email: <strong>{uemail}</strong></p>
-        <p style="margin:2px 0;">Phone: <strong>{uphone}</strong></p>
-        </div></div>
-        <div style="padding:12px 24px;background:#f9fafb;text-align:center;font-size:12px;color:#9ca3af;">NeatAura • {datetime.now().strftime('%d %b %Y, %I:%M %p')}</div>
-        </div>"""
+        <p style="margin:0;font-weight:600;">👤 Customer: {uname}</p>
+        <p style="margin:4px 0;">Email: {uemail}</p>
+        <p style="margin:2px 0;">Phone: {uphone}</p>
+        </div></div></div>"""
     )
     return jsonify({"ok": True})
-
 
 @app.post("/api/notify/sos")
 @require_auth
@@ -338,17 +364,15 @@ def notify_sos():
         <p style="margin:0;color:#991b1b;font-weight:700;font-size:16px;">⚠️ Reason: {d.get('reason','—')}</p></div>
         <table style="width:100%;border-collapse:collapse;">
         <tr><td style="padding:8px 0;color:#6b7280;width:40%;">Booking</td><td style="font-weight:600;">#{d.get('booking_id','—')}</td></tr>
-        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Customer</td><td style="padding:8px 6px;font-weight:600;">{uname}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">Customer</td><td style="font-weight:600;">{uname}</td></tr>
         <tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="font-weight:700;color:#dc2626;font-size:16px;">{uphone}</td></tr>
-        <tr style="background:#f9fafb;"><td style="padding:8px 6px;color:#6b7280;">Address</td><td style="padding:8px 6px;font-weight:600;">{d.get('address','—')}</td></tr>
-        <tr><td style="padding:8px 0;color:#6b7280;">Time</td><td>{datetime.now().strftime('%d %b %Y, %I:%M %p')}</td></tr>
+        <tr><td style="padding:8px 0;color:#6b7280;">Address</td><td style="font-weight:600;">{d.get('address','—')}</td></tr>
         </table>
         <div style="margin-top:14px;padding:12px;background:#fef2f2;border-radius:8px;text-align:center;">
         <p style="margin:0;color:#991b1b;font-weight:700;">🚨 Please call the customer immediately!</p></div>
         </div></div>"""
     )
     return jsonify({"ok": True})
-
 
 # ─── Serve frontend ──────────────────────────────────────────
 @app.get("/")
