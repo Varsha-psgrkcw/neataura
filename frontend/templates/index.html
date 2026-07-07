@@ -854,6 +854,13 @@ function showPage(id){
     updateSuggestion();updateSummary();
   }
   if(id==='page-details'){
+    // If profile already complete for this user — skip to home
+    if(isProfileComplete()){
+      document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+      document.getElementById('page-home').classList.remove('hidden');
+      renderHomeCategories();
+      return;
+    }
     populateCitySelects();
     // Always clear details form — never show another user's data
     var fields = ['details-name','details-phone','details-address','details-pincode'];
